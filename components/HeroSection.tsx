@@ -1,13 +1,143 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+interface Message {
+  id: string;
+  text: string;
+  sender: "user" | "twin";
+}
+
+const API_URL = "https://ai-digital-twin-301513903198.northamerica-northeast2.run.app";
 
 export default function HeroSection() {
   const [inputValue, setInputValue] = useState("");
+  const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const [sessionId, setSessionId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sessionInitialized, setSessionInitialized] = useState(false);
+  const chatFeedRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const generatedSessionId = uuidv4();
+    setSessionId(generatedSessionId);
+    
+    const initializeSession = async () => {
+      try {
+        const response = await fetch(`${API_URL}/init-session`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ session_id: generatedSessionId }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to initialize session: ${response.statusText}`);
+        }
+        setSessionInitialized(true);
+        console.log("Session initialized successfully with ID:", generatedSessionId);
+      } catch (error) {
+        console.error("Error initializing session:", error);
+        // Optionally, show an error message to the user
+      }
+    };
+
+    initializeSession();
+
+    setChatHistory([
+      {
+        id: uuidv4(),
+        text: "Hello. I am the digital manifestation of John Doe's professional architectural logic. How can I assist your system inquiry today?",
+        sender: "twin",
+      },
+    ]);
+  }, []);
+
+  useEffect(() => {
+    if (chatFeedRef.current) {
+      chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
+  const handleSendMessage = async () => {
+    if (!sessionInitialized) {
+      console.log("Session not initialized yet. Cannot send message.");
+      // Optionally, inform the user that the session is initializing
+      return;
+    }
+
+    console.log("handleSendMessage triggered. Input:", inputValue);
+    if (!inputValue.trim()) {
+      console.log("Input is empty, returning.");
+      return;
+    }
+
+    const userMessage: Message = {
+      id: uuidv4(),
+      text: inputValue,
+      sender: "user",
+    };
+
+    setChatHistory((prev) => [...prev, userMessage]);
+    
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Session-ID": sessionId,
+        },
+        body: JSON.stringify({ message: inputValue }),
+      });
+
+      setInputValue(""); // Clear input after sending
+
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      // Check if the response has the expected structure
+      if (data.status === "success" && data.data) {
+        const twinMessage: Message = {
+          id: uuidv4(),
+          text: data.data, // Access the message from data.data
+          sender: "twin",
+        };
+        setChatHistory((prev) => [...prev, twinMessage]);
+      } else {
+        // Handle unexpected response format
+        console.error("Unexpected response format:", data);
+        const errorMessage: Message = {
+          id: uuidv4(),
+          text: "Received an unexpected response from the server. Please try again.",
+          sender: "twin",
+        };
+        setChatHistory((prev) => [...prev, errorMessage]);
+      }
+
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorMessage: Message = {
+        id: uuidv4(),
+        text: "Sorry, I'm having trouble connecting to my core logic. Please try again later.",
+        sender: "twin",
+      };
+      setChatHistory((prev) => [...prev, errorMessage]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue) {
-      console.log("Command received:", inputValue);
-      setInputValue("");
+    console.log("Key pressed:", e.key);
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent default form submission if it's inside a form
+      handleSendMessage();
     }
   };
 
@@ -55,7 +185,6 @@ export default function HeroSection() {
           Talk to my Digital Twin.
         </p>
       </div>
-
       {/* Chat Interface */}
       <div
         className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-500"
@@ -85,74 +214,83 @@ export default function HeroSection() {
           </div>
         </div>
         {/* Chat Feed */}
-        <div className="h-96 overflow-y-auto p-6 space-y-6 font-body-md text-label-code">
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded bg-primary-container/20 border border-primary flex items-center justify-center shrink-0">
-              <span
-                className="material-symbols-outlined text-primary text-sm"
-                style={{ color: "#e9e47b" }}
-              >
-                memory
-              </span>
-            </div>
+        <div
+          ref={chatFeedRef}
+          className="h-96 overflow-y-auto p-6 space-y-6 font-body-md text-label-code"
+        >
+          {chatHistory.map((message) => (
             <div
-              className="bg-surface-container-high/40 p-4 rounded-lg border border-border-glass max-w-[80%]"
-              style={{
-                backgroundColor: "#003f8a",
-                borderColor: "#005cc5",
-                color: "#e0e0e0",
-              }}
+              key={message.id}
+              className={`flex gap-4 ${
+                message.sender === "user" ? "justify-end" : ""
+              }`}
             >
-              Hello. I am the digital manifestation of John Doe's professional
-              architectural logic. How can I assist your system inquiry today?
-            </div>
-          </div>
-
-          <div className="flex gap-4 justify-end">
-            <div
-              className="bg-primary/10 p-4 rounded-lg border border-primary/30 max-w-[80%] text-right"
-              style={{
-                backgroundColor: "#001735",
-                borderColor: "#003471",
-                color: "#e0e0e0",
-              }}
-            >
-              Tell me about your experience with enterprise-scale cloud migrations.
-            </div>
-            <div className="w-8 h-8 rounded bg-secondary-container/20 border border-secondary flex items-center justify-center shrink-0">
-              <span
-                className="material-symbols-outlined text-secondary text-sm"
-                style={{ color: "#ff9da4" }}
+              {message.sender === "twin" && (
+                <div className="w-8 h-8 rounded bg-primary-container/20 border border-primary flex items-center justify-center shrink-0">
+                  <span
+                    className="material-symbols-outlined text-primary text-sm"
+                    style={{ color: "#e9e47b" }}
+                  >
+                    memory
+                  </span>
+                </div>
+              )}
+              <div
+                className={`p-4 rounded-lg border max-w-[80%] ${
+                  message.sender === "user"
+                    ? "bg-primary/10 border-primary/30 text-right"
+                    : "bg-surface-container-high/40 border-border-glass"
+                }`}
+                style={
+                  message.sender === "user"
+                    ? {
+                        backgroundColor: "#001735",
+                        borderColor: "#003471",
+                        color: "#e0e0e0",
+                      }
+                    : {
+                        backgroundColor: "#003f8a",
+                        borderColor: "#005cc5",
+                        color: "#e0e0e0",
+                      }
+                }
               >
-                person
-              </span>
+                {message.text}
+              </div>
+              {message.sender === "user" && (
+                <div className="w-8 h-8 rounded bg-secondary-container/20 border border-secondary flex items-center justify-center shrink-0">
+                  <span
+                    className="material-symbols-outlined text-secondary text-sm"
+                    style={{ color: "#ff9da4" }}
+                  >
+                    person
+                  </span>
+                </div>
+              )}
             </div>
-          </div>
-
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded bg-primary-container/20 border border-primary flex items-center justify-center shrink-0">
-              <span
-                className="material-symbols-outlined text-primary text-sm"
-                style={{ color: "#e9e47b" }}
-              >
-                memory
-              </span>
-            </div>
-            <div
-              className="bg-surface-container-high/40 p-4 rounded-lg border border-border-glass max-w-[80%]"
-              style={{
-                backgroundColor: "#003f8a",
-                borderColor: "#005cc5",
-                color: "#e0e0e0",
-              }}
-            >
-              <span className="text-primary-fixed-dim">QUERY_EXECUTING...</span>
-              <br />
-              I have led 3 major migrations involving 500+ microservices. My
-              approach prioritizes zero-downtime cutovers using blue-green
-              deployment strategies and automated canary analysis.
-            </div>
-          </div>
+          ))}
+          {loading && (
+             <div className="flex gap-4">
+             <div className="w-8 h-8 rounded bg-primary-container/20 border border-primary flex items-center justify-center shrink-0">
+               <span
+                 className="material-symbols-outlined text-primary text-sm"
+                 style={{ color: "#e9e47b" }}
+               >
+                 memory
+               </span>
+             </div>
+             <div
+               className="bg-surface-container-high/40 p-4 rounded-lg border border-border-glass max-w-[80%]"
+               style={{
+                 backgroundColor: "#003f8a",
+                 borderColor: "#005cc5",
+                 color: "#e0e0e0",
+               }}
+             >
+               <span className="text-primary-fixed-dim">QUERY_EXECUTING...</span>
+             </div>
+           </div>
+          )}
         </div>
 
         {/* Input */}
@@ -183,16 +321,13 @@ export default function HeroSection() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyPress}
+              disabled={loading}
             />
             <button
               className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-white transition-colors"
               style={{ color: "#002451" }}
-              onClick={() => {
-                if (inputValue) {
-                  console.log("Command received:", inputValue);
-                  setInputValue("");
-                }
-              }}
+              onClick={handleSendMessage}
+              disabled={loading}
             >
               <span className="material-symbols-outlined">send</span>
             </button>

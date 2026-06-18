@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: ['3000-firebase-dan-portfolio-1781746425215.cluster-r7kbxfo3fnev2vskbkhhphetq6.cloudworkstations.dev'],
 };
 
 export default nextConfig;
