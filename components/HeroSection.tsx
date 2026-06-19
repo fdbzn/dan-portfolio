@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Typewriter from "./Typewriter";
 
 interface Message {
   id: string;
@@ -178,8 +179,8 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-20 text-center mb-12">
-        <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 tracking-tighter">
-          Got a minute? Here's what I've been working on.
+        <h1 className="font-display-lg text-3xl md:text-5xl mb-4 tracking-tighter">
+          <Typewriter text="Got a minute? Here's what I've been working on." />
         </h1>
         <p className="font-label-code text-label-code text-primary uppercase tracking-widest">
           QUICK QUESTIONS? ASK MY DIGITAL TWIN.
