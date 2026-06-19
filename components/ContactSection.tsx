@@ -1,6 +1,6 @@
 export default function ContactSection() {
   return (
-    <section className="relative bg-white text-void-black py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
+    <section id="contact" className="relative bg-white text-void-black py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
       <div className="max-w-max-width mx-auto relative z-10 flex flex-col items-center">
         <div className="text-center mb-24 z-20">
           <h2 className="font-headline-md text-display-lg-mobile md:text-display-lg mb-6 text-void-black">Let's build something legendary together.</h2>
@@ -33,41 +33,41 @@ export default function ContactSection() {
           </div>
           <div className="flex flex-col gap-6 justify-center">
             {/* Social Link 1: Email */}
-            <div className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:scale-105 transition-all duration-500 group cursor-pointer">
+            <a href="mailto:fdbazan1.0@gmail.com" className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:scale-105 transition-all duration-500 group cursor-pointer">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[#065f46]/10 flex items-center justify-center group-hover:bg-[#065f46]/20 transition-colors">
                   <span className="material-symbols-outlined text-[#065f46]">mail</span>
                 </div>
                 <div>
                   <div className="font-label-caps text-[10px] text-outline-variant">DIRECT_LINE</div>
-                  <div className="font-label-code text-sm text-void-black font-bold">hello@nexus-portfolio.com</div>
+                  <div className="font-label-code text-sm text-void-black font-bold">fdbazan1.0@gmail.com</div>
                 </div>
               </div>
-            </div>
+            </a>
             {/* Social Link 2: GitHub */}
-            <div className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_25px_45px_rgba(0,0,0,0.04)] hover:scale-105 transition-all duration-500 group cursor-pointer">
+            <a href="https://github.com/fdbzn" target="_blank" rel="noopener noreferrer" className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_25px_45px_rgba(0,0,0,0.04)] hover:scale-105 transition-all duration-500 group cursor-pointer">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-void-black/5 flex items-center justify-center group-hover:bg-void-black/10 transition-colors">
                   <span className="material-symbols-outlined text-void-black">code</span>
                 </div>
                 <div>
                   <div className="font-label-caps text-[10px] text-outline-variant">SOURCE_CODE</div>
-                  <div className="font-label-code text-sm text-void-black font-bold">GITHUB.COM/JOHNDOE</div>
+                  <div className="font-label-code text-sm text-void-black font-bold">github.com/fdbzn</div>
                 </div>
               </div>
-            </div>
+            </a>
             {/* Social Link 3: LinkedIn */}
-            <div className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-500 group cursor-pointer">
+            <a href="https://linkedin.com/in/dan-bazan-f1010" target="_blank" rel="noopener noreferrer" className="w-full p-6 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-500 group cursor-pointer">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[#005ac1]/10 flex items-center justify-center group-hover:bg-[#005ac1]/20 transition-colors">
                   <span className="material-symbols-outlined text-[#005ac1]">link</span>
                 </div>
                 <div>
                   <div className="font-label-caps text-[10px] text-outline-variant">PROFESSIONAL_NODE</div>
-                  <div className="font-label-code text-sm text-void-black font-bold">LINKEDIN.COM/IN/JOHNDOE</div>
+                  <div className="font-label-code text-sm text-void-black font-bold">linkedin.com/in/dan-bazan-f1010</div>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

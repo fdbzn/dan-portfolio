@@ -1,6 +1,8 @@
-"use client";
+'use client';
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Typewriter from "./Typewriter";
+import ParticleBackground, { ParticleBackgroundHandle } from './ParticleBackground';
 
 interface Message {
   id: string;
@@ -17,6 +19,13 @@ export default function HeroSection() {
   const [loading, setLoading] = useState(false);
   const [sessionInitialized, setSessionInitialized] = useState(false);
   const chatFeedRef = useRef<HTMLDivElement>(null);
+  const particleRef = useRef<ParticleBackgroundHandle>(null);
+
+  const handleTechStackClick = () => {
+    if (particleRef.current) {
+      particleRef.current.moveParticles();
+    }
+  };
 
   useEffect(() => {
     const generatedSessionId = uuidv4();
@@ -39,7 +48,6 @@ export default function HeroSection() {
         console.log("Session initialized successfully with ID:", generatedSessionId);
       } catch (error) {
         console.error("Error initializing session:", error);
-        // Optionally, show an error message to the user
       }
     };
 
@@ -48,7 +56,7 @@ export default function HeroSection() {
     setChatHistory([
       {
         id: uuidv4(),
-        text: "Hello. I am the digital manifestation of John Doe's professional architectural logic. How can I assist your system inquiry today?",
+        text: "Welcome! I'm Francisco's digital twin, powered by RAG architecture to provide real, precise information about his professional journey. I'm here to clear up your questions about his tools, experience, or past projects. What would you like to know?",
         sender: "twin",
       },
     ]);
@@ -61,15 +69,15 @@ export default function HeroSection() {
   }, [chatHistory]);
 
   const handleSendMessage = async () => {
+    if (particleRef.current) {
+      particleRef.current.moveParticles();
+    }
     if (!sessionInitialized) {
       console.log("Session not initialized yet. Cannot send message.");
-      // Optionally, inform the user that the session is initializing
       return;
     }
 
-    console.log("handleSendMessage triggered. Input:", inputValue);
     if (!inputValue.trim()) {
-      console.log("Input is empty, returning.");
       return;
     }
 
@@ -80,7 +88,6 @@ export default function HeroSection() {
     };
 
     setChatHistory((prev) => [...prev, userMessage]);
-    
     setLoading(true);
 
     try {
@@ -93,7 +100,7 @@ export default function HeroSection() {
         body: JSON.stringify({ message: inputValue }),
       });
 
-      setInputValue(""); // Clear input after sending
+      setInputValue("");
 
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -101,16 +108,14 @@ export default function HeroSection() {
 
       const data = await response.json();
       
-      // Check if the response has the expected structure
       if (data.status === "success" && data.data) {
         const twinMessage: Message = {
           id: uuidv4(),
-          text: data.data, // Access the message from data.data
+          text: data.data,
           sender: "twin",
         };
         setChatHistory((prev) => [...prev, twinMessage]);
       } else {
-        // Handle unexpected response format
         console.error("Unexpected response format:", data);
         const errorMessage: Message = {
           id: uuidv4(),
@@ -134,60 +139,64 @@ export default function HeroSection() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log("Key pressed:", e.key);
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent default form submission if it's inside a form
+      e.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop">
+      
+      <div className="absolute inset-0 z-0">
+        <ParticleBackground ref={particleRef} />
+      </div>
+
       {/* Background Mosaic */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none mosaic-bg">
+      <div className="absolute inset-0 z-1 opacity-20 pointer-events-none mosaic-bg">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-full p-8 scale-110">
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass shadow-2xl bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqyzpAiY78mEi7HPmpnsuaf4src5Gbxf4bA6cya3M6wnWdbEt9Xw1uJgFXSMxX1QQD2LNJg2pbBX9PuS9RUce2E58Py9upeZmj5lFZmeRXIqiM9J8hHsHelhYz0DpuBEfI1bEh2vlNqrJ48dAvoYxq0KkcK2l0l68JJX95GOja12TDRud6nuUiigMp2yjsXjxxE1zKPS7EDoVSgH0o9LDY1sL7uiVRqZZLepTpArfyGG46BIcTmqmqe26RSe7GUkhbnmNXVObw')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbdZ7IStlvnhsc2-X6xSUwdcxlzSbmNlVNJPf4I1rXyFs0x01PIRq_Kxkrk5O3oDSvuIx8ZJq52gBLMQgUBOnJuS-EcbwmOtt-gef6Xj0BISQjztuvJN3tcq2BSBTWU4PfHYmw_XORZNb9bQcV8-A0osnCmzk7RzmBFClhXloiFIWq4sitaQNQp21AKgCmD_kJtFfBVrixdeKysk8oKUzygObEMSmQPLNV42HvlJZlflrKNl8EJ6LsT1ozYphiv7ssRCj_8oLY')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9DoESU36X5gq4_FqE-wtlNNgvV9PI-tEwEb9A9FJGbwF5wdgdPFxHdQDPrcw9QC71BAw0U0q6B3h5_PbA3fv49gomGfQm9gFJTbj4r711L27Us4Y1UFG3U5LQV0Fu8vbWpZq42AAO1V7LloBpD94bMCt13ibMlm-R22pUhuy5AqIh9oC5fkmKQrniNnqndmjATuQ7ymSv4vqdfVTWoPnv60_Doe3WRgvcYoij8hD7g6zVLE0awvFOeYEvUNhGyjy8OV3UmAIz')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCXsyyc40NbmHQmFe9Eqzyupv30dmAx2-KluuM02_QHdACFb-HMENtUOrXXQGYl4-hkZi3ED9rxkdnX5CTIsemRYvhfOH2uT2j4M0bh8vI88IKbxKgHJ1R-tEE5JuAR1Sm4MkR-EqE3pWa53nFV11lwQjwQnVD1VR7PtziLTxZRs2yLQeTBn7pQ1oPIr-LINkzRb8xa5ZouWGUAMmtCq6y-LrcnVFKqHj3vsj0_mnrn1eVBQetDpYs4eLGfcsRW49RQjFsksFiw')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0VsvRe7EfOQ9j1fhrefWKABWIOTFUrJyvNWfwS30jTfRCPrr1ofCqS7DoTrvBGWO-5oLzy5UtpWYHLq4Kl5oo3Uj0W5Za0eUfvw2dq3Ai3-3jBVp750OjywJAS_mNqxQIZQZgy4c4H603IEATHNy-IeaO6FXaM3tAH7UnQEHot0fIAorSVyeiYLsceItuaLU2m1thb8w6QkCTur_rcdta6oOs3kUq_PNkVitJ3GBdHp6T_QC3KTxpspNpN_GZgbrG5DqMtJpY')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuApvslf8pL1EVrriuBZ4tMGDUz-h7-Ngjtrm3kmUZ0wgyb5bZt5EIz3FD7FuwQPuhYg7pfFaP4ZYl4lLS7l9wRb_vcIkh-f0grXKU_iQVSKVXOfpo-FfliKpiY9EMqSbSDECN_ffXKnZYWucWkjjEY-FM_EDeimLw4eQkFOuuNHK92nzyddgglRyLd2VeosTiK_La_hfx2PNcFLKHicqjIi-eVbSwcNFv9UNej84HyLOMlECjPmX04tEm5msOjwEPZa3B7_Fukz')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVqzWNgrp_UZDp2jdWeCDspy5IrLS6lBYPcxGVYnnUCjlHXThuan6X6_ytzEFof0oRDfTqJYk17Uqg0jj4K-mptRlMOrDRRu3D06HcAIyuDjloEbPAmSnyzs6d5dhqG1XieUcfBE5tr372wj4RejY8Xrwy3InryiZ4dqv1QIwC8Nv3S7krEEDLjQsyOHlJIYWFuQbqcv3caU7RqFiE-VPkiUAqoTxBu6V5Wcav6GuTYKjncP0v6XVx0ZxT2mB-q_OXkCCaLeYz')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBU_kcqB6heU5vje-CfhyWj66PsARJBK45nXIvZmzeKQYVRfdQyQisNqo1VUeYEoNqnbPjdel981U26CY5Cltg_I5pUKg76cqtsPH1AIYC7mJYqkB3_IOHDYiYqTDN-wb5vPUrUK8Q2l7ZliIBFUsPm2pCJC2I70OKRaJUGLdICFlCPAUsV5U0ksw51-Li8z8NwfNDWZhnNg-3eV0ewrIelcKNQonAd-MDm9xHuSQOl8NbcMoEhm_BXKMOAwke20JkxUtC1QnkQ')",
             }}
           ></div>
         </div>
       </div>
 
       <div className="relative z-20 text-center mb-12">
-        <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 tracking-tighter">
-          Hi, I'm John Doe.
+        <h1 className="font-display-lg text-3xl md:text-5xl mb-4 tracking-tighter">
+          <Typewriter parts={["Got a minute? ", 1000, "Here's what I've been working on."]} />
         </h1>
-        <p className="font-label-code text-label-code text-primary uppercase tracking-widest">
-          Talk to my Digital Twin.
+        <p className="font-label-code text-xl text-primary uppercase tracking-widest">
+          QUICK QUESTIONS? ASK MY DIGITAL TWIN.
         </p>
       </div>
       {/* Chat Interface */}
       <div
-        className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-500"
+        className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden"
         style={{
           backgroundColor: "rgba(0, 36, 81, 0.95)",
           border: "1px solid rgba(255, 255, 255, 0.15)",
@@ -205,7 +214,7 @@ export default function HeroSection() {
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)]"></div>
             <span className="font-label-code text-label-code text-on-surface-variant">
-              INSTANCE_01: ACTIVE
+              DANIEL BAZÁN: ACTIVE
             </span>
           </div>
           <div className="flex gap-2">
@@ -296,7 +305,7 @@ export default function HeroSection() {
         {/* Input */}
         <div className="p-4 border-t border-border-glass bg-surface-container-low/50">
           <div className="flex flex-wrap gap-2 mb-4 font-label-code text-[10px]">
-            <button className="px-3 py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
+            <button onClick={handleTechStackClick} className="px-3 py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
               TELL_ME_ABOUT_TECH_STACK
             </button>
             <button className="px-3 py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300">
