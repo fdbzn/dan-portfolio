@@ -146,7 +146,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop">
+    <section className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop py-8 md:py-0">
       
       <div className="absolute inset-0 z-0">
         <ParticleBackground ref={particleRef} />
@@ -154,7 +154,7 @@ export default function HeroSection() {
 
       {/* Background Mosaic */}
       <div className="absolute inset-0 z-1 opacity-20 pointer-events-none mosaic-bg">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-full p-8 scale-110">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-full p-4 md:p-8 scale-110">
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass shadow-2xl bg-stellar-white"
             style={{
@@ -186,11 +186,11 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="relative z-20 text-center mb-12">
-        <h1 className="font-display-lg text-3xl md:text-5xl mb-4 tracking-tighter">
+      <div className="relative z-20 text-center mb-8 md:mb-12 px-2 w-full">
+        <h1 className="font-display-lg text-2xl sm:text-3xl md:text-5xl mb-3 md:mb-4 tracking-tighter leading-tight">
           <Typewriter parts={["Got a minute? ", 1000, "Here's what I've been working on."]} />
         </h1>
-        <p className="font-label-code text-xl text-primary uppercase tracking-widest">
+        <p className="font-label-code text-xs sm:text-sm md:text-xl text-primary uppercase tracking-widest max-w-xs sm:max-w-none mx-auto">
           QUICK QUESTIONS? ASK MY DIGITAL TWIN.
         </p>
       </div>
@@ -208,12 +208,12 @@ export default function HeroSection() {
         <div className="scanline"></div>
         {/* Header */}
         <div
-          className="px-6 py-4 border-b border-border-glass flex items-center justify-between bg-surface-container-low/50"
+          className="px-4 py-3 md:px-6 md:py-4 border-b border-border-glass flex items-center justify-between bg-surface-container-low/50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.2)", color: "#e0e0e0" }}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)]"></div>
-            <span className="font-label-code text-label-code text-on-surface-variant">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)] shrink-0"></div>
+            <span className="font-label-code text-xs md:text-label-code text-on-surface-variant truncate">
               DANIEL BAZÁN: ACTIVE
             </span>
           </div>
@@ -225,12 +225,12 @@ export default function HeroSection() {
         {/* Chat Feed */}
         <div
           ref={chatFeedRef}
-          className="h-96 overflow-y-auto p-6 space-y-6 font-body-md text-label-code"
+          className="h-72 md:h-96 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6 font-body-md text-sm md:text-label-code"
         >
           {chatHistory.map((message) => (
             <div
               key={message.id}
-              className={`flex gap-4 ${
+              className={`flex gap-2 md:gap-4 ${
                 message.sender === "user" ? "justify-end" : ""
               }`}
             >
@@ -245,7 +245,7 @@ export default function HeroSection() {
                 </div>
               )}
               <div
-                className={`p-4 rounded-lg border max-w-[80%] ${
+                className={`p-3 md:p-4 rounded-lg border max-w-[85%] md:max-w-[80%] ${
                   message.sender === "user"
                     ? "bg-primary/10 border-primary/30 text-right"
                     : "bg-surface-container-high/40 border-border-glass"
@@ -279,7 +279,7 @@ export default function HeroSection() {
             </div>
           ))}
           {loading && (
-             <div className="flex gap-4">
+             <div className="flex gap-2 md:gap-4">
              <div className="w-8 h-8 rounded bg-primary-container/20 border border-primary flex items-center justify-center shrink-0">
                <span
                  className="material-symbols-outlined text-primary text-sm"
@@ -289,7 +289,7 @@ export default function HeroSection() {
                </span>
              </div>
              <div
-               className="bg-surface-container-high/40 p-4 rounded-lg border border-border-glass max-w-[80%]"
+               className="bg-surface-container-high/40 p-3 md:p-4 rounded-lg border border-border-glass max-w-[85%] md:max-w-[80%]"
                style={{
                  backgroundColor: "#003f8a",
                  borderColor: "#005cc5",
@@ -303,15 +303,15 @@ export default function HeroSection() {
         </div>
 
         {/* Input */}
-        <div className="p-4 border-t border-border-glass bg-surface-container-low/50">
-          <div className="flex flex-wrap gap-2 mb-4 font-label-code text-[10px]">
-            <button onClick={handleTechStackClick} className="px-3 py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
+        <div className="p-3 md:p-4 border-t border-border-glass bg-surface-container-low/50">
+          <div className="flex flex-wrap gap-2 mb-3 md:mb-4 font-label-code text-[10px]">
+            <button onClick={handleTechStackClick} className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
               TELL_ME_ABOUT_TECH_STACK
             </button>
-            <button className="px-3 py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300">
+            <button className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300">
               VIEW_LATEST_PROJECTS
             </button>
-            <button className="px-3 py-1.5 rounded border border-tertiary/30 bg-tertiary/5 text-tertiary hover:bg-tertiary/20 hover:border-tertiary transition-all duration-300">
+            <button className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-tertiary/30 bg-tertiary/5 text-tertiary hover:bg-tertiary/20 hover:border-tertiary transition-all duration-300">
               HOW_DO_YOU_LEAD_TEAMS?
             </button>
           </div>

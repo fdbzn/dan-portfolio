@@ -24,30 +24,30 @@ const projects = [
 
 export default function ProjectsGallery() {
   return (
-    <section id="projects" className="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest/5 border-t border-border-glass">
+    <section id="projects" className="scroll-mt-28 md:scroll-mt-24 py-16 md:py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest/5 border-t border-border-glass">
       <div className="max-w-max-width mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="font-display-lg text-display-lg-mobile md:text-headline-md mb-4 tracking-tighter">
+        <div className="text-center mb-10 md:mb-16 px-2">
+          <h2 className="font-display-lg text-display-lg-mobile md:text-headline-md mb-3 md:mb-4 tracking-tighter">
             Featured <span className="text-plasma-orange">Case Studies</span>
           </h2>
-          <p className="font-body-lg text-on-surface-variant max-w-2xl mx-auto">
+          <p className="font-body-lg text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto">
             A selection of digital products where I served as both technical lead and product visionary.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-gutter">
           {projects.map((project, index) => (
-            <div key={index} className={`glass-panel rounded-xl overflow-hidden flex flex-col ${project.borderColor} hover:scale-[1.02] transition-transform duration-500 bg-surface-container-low`}>
+            <div key={index} className={`glass-panel rounded-xl overflow-hidden flex flex-col border-t-4 ${project.borderColor} hover:scale-[1.02] transition-transform duration-500 bg-surface-container-low`}>
               <div
-                className="h-48 bg-cover bg-center"
+                className="h-40 md:h-48 bg-cover bg-center"
                 style={{ backgroundImage: `url('${project.image}')` }}
               ></div>
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-4 md:p-6 flex flex-col flex-grow">
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tags.map((tag, i) => (
                     <span key={i} className="px-2 py-0.5 rounded border border-plasma-orange/30 bg-plasma-orange/5 text-plasma-orange text-[10px] font-label-code">{tag}</span>
                   ))}
                 </div>
-                <h3 className="font-headline-md text-xl text-on-surface mb-3">{project.title}</h3>
+                <h3 className="font-headline-md text-lg md:text-xl text-on-surface mb-2 md:mb-3">{project.title}</h3>
                 <p className="text-on-surface-variant text-sm line-clamp-3">{project.description}</p>
               </div>
             </div>

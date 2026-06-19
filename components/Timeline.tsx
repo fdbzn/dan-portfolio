@@ -31,24 +31,27 @@ const timelineData = [
 
 export default function Timeline() {
   return (
-    <section id="timeline" className="max-w-max-width mx-auto px-margin-desktop py-24">
+    <section id="timeline" className="scroll-mt-28 md:scroll-mt-24 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
       <div className="w-full max-w-4xl mx-auto">
-        <h2 className="font-headline-md text-headline-md mb-12 flex items-center justify-center gap-4">
+        <h2 className="font-headline-md text-2xl md:text-headline-md mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
           <span className="text-primary font-label-code text-sm tracking-widest">[ 01 ]</span>
           CORE_TIMELINE
         </h2>
-        <div className="space-y-12 relative">
+        <div className="space-y-8 md:space-y-12 relative">
           <div className="absolute left-[15px] top-0 bottom-0 w-px bg-gradient-to-b from-primary via-secondary to-transparent"></div>
           
           {timelineData.map((item, index) => (
-            <div key={index} className="relative pl-12">
-              <div className={`absolute left-0 top-2 w-8 h-8 rounded-full bg-void-black border-2 ${index % 2 === 0 ? 'border-primary' : 'border-secondary'} flex items-center justify-center z-10`}>
+            <div key={index} className="relative pl-10 md:pl-12">
+              <div className={`absolute left-0 top-2 w-7 h-7 md:w-8 md:h-8 rounded-full bg-void-black border-2 ${index % 2 === 0 ? 'border-primary' : 'border-secondary'} flex items-center justify-center z-10`}>
                 <div className={`w-2 h-2 ${index % 2 === 0 ? 'bg-primary' : 'bg-secondary'} rounded-full ${index === 0 ? 'animate-pulse' : ''}`}></div>
               </div>
-              <div className="glass-panel p-6 rounded-xl hover:bg-surface-container-low transition-colors group">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className={`font-headline-md text-xl ${index % 2 === 0 ? 'text-primary' : 'text-secondary'}`}>{item.role}</h3>
-                  <span className={`font-label-code text-label-code ${index % 2 === 0 ? 'text-secondary' : 'text-on-surface-variant'}`}>{item.date}</span>
+              <div className="glass-panel p-4 md:p-6 rounded-xl hover:bg-surface-container-low transition-colors group">
+                <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-start mb-2">
+                  <div className="min-w-0">
+                    <h3 className={`font-headline-md text-lg md:text-xl ${index % 2 === 0 ? 'text-primary' : 'text-secondary'}`}>{item.role}</h3>
+                    <p className="font-label-code text-xs md:text-sm text-on-surface-variant mt-1">{item.company}</p>
+                  </div>
+                  <span className={`font-label-code text-xs md:text-label-code shrink-0 ${index % 2 === 0 ? 'text-secondary' : 'text-on-surface-variant'}`}>{item.date}</span>
                 </div>
                 <p className="text-on-surface-variant mb-4">
                   {item.description}
