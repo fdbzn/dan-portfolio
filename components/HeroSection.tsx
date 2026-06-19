@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Typewriter from "./Typewriter";
+import ParticleBackground, { ParticleBackgroundHandle } from './ParticleBackground';
 
 interface Message {
   id: string;
@@ -18,6 +19,13 @@ export default function HeroSection() {
   const [loading, setLoading] = useState(false);
   const [sessionInitialized, setSessionInitialized] = useState(false);
   const chatFeedRef = useRef<HTMLDivElement>(null);
+  const particleRef = useRef<ParticleBackgroundHandle>(null);
+
+  const handleTechStackClick = () => {
+    if (particleRef.current) {
+      particleRef.current.moveParticles();
+    }
+  };
 
   useEffect(() => {
     const generatedSessionId = uuidv4();
@@ -40,7 +48,6 @@ export default function HeroSection() {
         console.log("Session initialized successfully with ID:", generatedSessionId);
       } catch (error) {
         console.error("Error initializing session:", error);
-        // Optionally, show an error message to the user
       }
     };
 
@@ -49,7 +56,7 @@ export default function HeroSection() {
     setChatHistory([
       {
         id: uuidv4(),
-        text: "Welcome. I am here to guide you through Dan's digital workspace. Feel free to ask me about his tech stack, past deployments, or work methodology.",
+        text: "Welcome! I'm Francisco's digital twin, powered by RAG architecture to provide real, precise information about his professional journey. I'm here to clear up your questions about his tools, experience, or past projects. What would you like to know?",
         sender: "twin",
       },
     ]);
@@ -62,15 +69,15 @@ export default function HeroSection() {
   }, [chatHistory]);
 
   const handleSendMessage = async () => {
+    if (particleRef.current) {
+      particleRef.current.moveParticles();
+    }
     if (!sessionInitialized) {
       console.log("Session not initialized yet. Cannot send message.");
-      // Optionally, inform the user that the session is initializing
       return;
     }
 
-    console.log("handleSendMessage triggered. Input:", inputValue);
     if (!inputValue.trim()) {
-      console.log("Input is empty, returning.");
       return;
     }
 
@@ -81,7 +88,6 @@ export default function HeroSection() {
     };
 
     setChatHistory((prev) => [...prev, userMessage]);
-    
     setLoading(true);
 
     try {
@@ -94,7 +100,7 @@ export default function HeroSection() {
         body: JSON.stringify({ message: inputValue }),
       });
 
-      setInputValue(""); // Clear input after sending
+      setInputValue("");
 
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -102,16 +108,14 @@ export default function HeroSection() {
 
       const data = await response.json();
       
-      // Check if the response has the expected structure
       if (data.status === "success" && data.data) {
         const twinMessage: Message = {
           id: uuidv4(),
-          text: data.data, // Access the message from data.data
+          text: data.data,
           sender: "twin",
         };
         setChatHistory((prev) => [...prev, twinMessage]);
       } else {
-        // Handle unexpected response format
         console.error("Unexpected response format:", data);
         const errorMessage: Message = {
           id: uuidv4(),
@@ -135,17 +139,21 @@ export default function HeroSection() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log("Key pressed:", e.key);
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent default form submission if it's inside a form
+      e.preventDefault();
       handleSendMessage();
     }
   };
 
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-margin-desktop">
+      
+      <div className="absolute inset-0 z-0">
+        <ParticleBackground ref={particleRef} />
+      </div>
+
       {/* Background Mosaic */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none mosaic-bg">
+      <div className="absolute inset-0 z-1 opacity-20 pointer-events-none mosaic-bg">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-full p-8 scale-110">
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass shadow-2xl bg-stellar-white"
@@ -188,7 +196,7 @@ export default function HeroSection() {
       </div>
       {/* Chat Interface */}
       <div
-        className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.01] transition-transform duration-500"
+        className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden"
         style={{
           backgroundColor: "rgba(0, 36, 81, 0.95)",
           border: "1px solid rgba(255, 255, 255, 0.15)",
@@ -206,7 +214,7 @@ export default function HeroSection() {
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)]"></div>
             <span className="font-label-code text-label-code text-on-surface-variant">
-              DAN BAZAN: ACTIVE
+              DANIEL BAZÁN: ACTIVE
             </span>
           </div>
           <div className="flex gap-2">
@@ -297,7 +305,7 @@ export default function HeroSection() {
         {/* Input */}
         <div className="p-4 border-t border-border-glass bg-surface-container-low/50">
           <div className="flex flex-wrap gap-2 mb-4 font-label-code text-[10px]">
-            <button className="px-3 py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
+            <button onClick={handleTechStackClick} className="px-3 py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300">
               TELL_ME_ABOUT_TECH_STACK
             </button>
             <button className="px-3 py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300">
