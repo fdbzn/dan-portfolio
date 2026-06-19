@@ -2,13 +2,28 @@
 
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 
+// Define the Particle interface to fix the type error
+interface Particle {
+  x: number;
+  y: number;
+  baseX: number;
+  baseY: number;
+  newBaseX: number;
+  newBaseY: number;
+  size: number;
+  density: number;
+  color: string;
+  draw: () => void;
+  update: () => void;
+}
+
 export interface ParticleBackgroundHandle {
   moveParticles: () => void;
 }
 
 const ParticleBackground = forwardRef<ParticleBackgroundHandle, {}>((props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Partial[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
 
   useImperativeHandle(ref, () => ({moveParticles}));
 
@@ -50,7 +65,7 @@ const ParticleBackground = forwardRef<ParticleBackgroundHandle, {}>((props, ref)
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseout', handleMouseOut);
 
-    class Particle {
+    class Particle implements Particle {
       x: number;
       y: number;
       baseX: number;
