@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AETHER_OS | John Doe Portfolio",
-  description: "A digital twin portfolio.",
+  title: "Dn-Bazan | Project",
+  description: "Digital projects.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,11 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
           rel="stylesheet"
@@ -25,9 +29,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body-md text-on-surface">
-        {children}
-      </body>
+      <body className="font-body-md text-on-surface">{children}</body>
     </html>
   );
 }
