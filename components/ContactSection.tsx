@@ -38,7 +38,7 @@ export default function ContactSection() {
               <button className="w-full py-4 bg-[#065f46] text-white font-label-code font-bold rounded-lg hover:bg-[#044030] transition-all active:scale-[0.98] shadow-xl shadow-[#065f46]/20 mt-2">
                 EXECUTE_SEND
               </button>
-              <p className="text-xs text-center text-outline-variant mt-4">This form is not yet functional.</p>
+              <p className="text-xs text-center text-outline-variant mt-4">Not available yet.</p>
             </div>
           </div>
           <div className="flex flex-col gap-6 justify-center">
