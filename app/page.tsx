@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <ParticleBackground />
       <Header />
-      <main className="relative z-10 pt-24">
+      <main className="relative z-10 pt-28 md:pt-24">
         <HeroSection />
         <Timeline />
         <ProjectsGallery />

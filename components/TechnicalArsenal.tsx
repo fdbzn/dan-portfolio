@@ -27,14 +27,14 @@ const technicalSkills = [
 
 export default function TechnicalArsenal() {
   return (
-    <section id="skills" className="max-w-max-width mx-auto px-margin-desktop py-24 border-t border-border-glass">
-      <h2 className="font-headline-md text-headline-md mb-12 flex items-center justify-center gap-4">
+    <section id="skills" className="scroll-mt-28 md:scroll-mt-24 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24 border-t border-border-glass">
+      <h2 className="font-headline-md text-2xl md:text-headline-md mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
         <span className="text-secondary font-label-code text-sm tracking-widest">[ 02 ]</span>
         TECHNICAL_ARSENAL
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {technicalSkills.map((category, index) => (
-          <div key={index} className={`glass-panel p-6 rounded-xl bg-surface-container-low/50 border border-border-glass hover:border-${category.color}/50 transition-all duration-300`}>
+          <div key={index} className={`glass-panel p-4 md:p-6 rounded-xl bg-surface-container-low/50 border border-border-glass hover:border-${category.color}/50 transition-all duration-300`}>
             <div className="flex items-center gap-3 mb-4">
               <div className={`w-8 h-8 rounded bg-${category.color}/10 border border-${category.color}/30 flex items-center justify-center`}>
                 <span className={`material-symbols-outlined text-${category.color} text-sm`}>{category.icon}</span>
