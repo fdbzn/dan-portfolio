@@ -2,34 +2,57 @@
 import { useState, useEffect } from 'react';
 
 interface TypewriterProps {
-  text: string;
+  parts: (string | number)[];
   speed?: number;
   className?: string;
 }
 
-const Typewriter: React.FC<TypewriterProps> = ({ text, speed = 75, className }) => {
+const Typewriter: React.FC<TypewriterProps> = ({ parts, speed = 75, className }) => {
   const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
+  const [partIndex, setPartIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     setDisplayedText('');
-    setIndex(0);
-  }, [text]);
+    setPartIndex(0);
+    setCharIndex(0);
+    setIsFinished(false);
+  }, [parts]);
 
   useEffect(() => {
-    if (index < text.length) {
-      const timeoutId = setTimeout(() => {
-        setDisplayedText((prev) => prev + text.charAt(index));
-        setIndex((prev) => prev + 1);
-      }, speed);
-      return () => clearTimeout(timeoutId);
+    if (partIndex >= parts.length) {
+      setIsFinished(true);
+      return;
     }
-  }, [index, text, speed]);
+
+    const currentPart = parts[partIndex];
+
+    if (typeof currentPart === 'number') {
+      const timer = setTimeout(() => {
+        setPartIndex(partIndex + 1);
+      }, currentPart);
+      return () => clearTimeout(timer);
+    }
+
+    if (typeof currentPart === 'string') {
+      if (charIndex < currentPart.length) {
+        const timer = setTimeout(() => {
+          setDisplayedText((prev) => prev + currentPart.charAt(charIndex));
+          setCharIndex(charIndex + 1);
+        }, speed);
+        return () => clearTimeout(timer);
+      } else {
+        setPartIndex(partIndex + 1);
+        setCharIndex(0);
+      }
+    }
+  }, [partIndex, charIndex, parts, speed]);
 
   return (
     <span className={className}>
       {displayedText}
-      <span className="animate-pulse">|</span>
+      {!isFinished && <span className="animate-pulse">|</span>}
     </span>
   );
 };

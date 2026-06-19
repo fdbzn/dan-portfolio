@@ -105,7 +105,7 @@ export default function ParticleBackground() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       particles = [];
-      let numberOfParticles = (canvas.width * canvas.height) / 9000;
+      let numberOfParticles = (canvas.width * canvas.height) / 6000;
       for (let i = 0; i < numberOfParticles; i++) {
         let x = Math.random() * canvas.width;
         let y = Math.random() * canvas.height;
@@ -137,7 +137,7 @@ export default function ParticleBackground() {
 
           if (distance < 100) {
             opacityValue = 1 - distance / 100;
-            ctx.strokeStyle = `rgba(173, 198, 255, ${opacityValue * 0.2})`;
+            ctx.strokeStyle = `rgba(173, 198, 255, ${opacityValue * 0.5})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);

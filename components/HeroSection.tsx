@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Typewriter from "./Typewriter";
@@ -49,7 +49,7 @@ export default function HeroSection() {
     setChatHistory([
       {
         id: uuidv4(),
-        text: "Welcome. I am here to guide you through Francisco's digital workspace. Feel free to ask me about his tech stack, past deployments, or work methodology.",
+        text: "Welcome. I am here to guide you through Dan's digital workspace. Feel free to ask me about his tech stack, past deployments, or work methodology.",
         sender: "twin",
       },
     ]);
@@ -180,9 +180,9 @@ export default function HeroSection() {
 
       <div className="relative z-20 text-center mb-12">
         <h1 className="font-display-lg text-3xl md:text-5xl mb-4 tracking-tighter">
-          <Typewriter text="Got a minute? Here's what I've been working on." />
+          <Typewriter parts={["Got a minute? ", 1000, "Here's what I've been working on."]} />
         </h1>
-        <p className="font-label-code text-label-code text-primary uppercase tracking-widest">
+        <p className="font-label-code text-xl text-primary uppercase tracking-widest">
           QUICK QUESTIONS? ASK MY DIGITAL TWIN.
         </p>
       </div>
@@ -206,7 +206,7 @@ export default function HeroSection() {
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)]"></div>
             <span className="font-label-code text-label-code text-on-surface-variant">
-              INSTANCE_01: ACTIVE
+              DAN BAZAN: ACTIVE
             </span>
           </div>
           <div className="flex gap-2">
