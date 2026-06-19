@@ -1,4 +1,10 @@
+"use client";
+
 export default function ContactSection() {
+  const handleFormClick = () => {
+    alert("This contact form is currently under construction, but you can reach me through the other available channels.");
+  };
+
   return (
     <section id="contact" className="relative bg-white text-void-black py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
       <div className="max-w-max-width mx-auto relative z-10 flex flex-col items-center">
@@ -8,7 +14,10 @@ export default function ContactSection() {
         </div>
         <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 z-30 relative">
           {/* Contact Form Floating Card */}
-          <div className="w-full p-8 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-transform duration-500">
+          <div
+            className="w-full p-8 rounded-2xl border border-outline-variant/20 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-transform duration-500"
+            onClick={handleFormClick}
+          >
             <div className="flex items-center gap-3 mb-6 border-b border-outline-variant/10 pb-4">
               <div className="w-3 h-3 rounded-full bg-[#065f46] shadow-[0_0_8px_rgba(6,95,70,0.5)]"></div>
               <span className="font-label-code text-label-code text-outline-variant uppercase tracking-widest">INSTANCE_02: UPLINK_ACTIVE</span>
@@ -29,6 +38,7 @@ export default function ContactSection() {
               <button className="w-full py-4 bg-[#065f46] text-white font-label-code font-bold rounded-lg hover:bg-[#044030] transition-all active:scale-[0.98] shadow-xl shadow-[#065f46]/20 mt-2">
                 EXECUTE_SEND
               </button>
+              <p className="text-xs text-center text-outline-variant mt-4">This form is not yet functional.</p>
             </div>
           </div>
           <div className="flex flex-col gap-6 justify-center">
