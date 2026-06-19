@@ -48,7 +48,7 @@ export default function HeroSection() {
     setChatHistory([
       {
         id: uuidv4(),
-        text: "Hello. I am the digital manifestation of John Doe's professional architectural logic. How can I assist your system inquiry today?",
+        text: "Welcome. I am here to guide you through Francisco's digital workspace. Feel free to ask me about his tech stack, past deployments, or work methodology.",
         sender: "twin",
       },
     ]);
@@ -179,10 +179,10 @@ export default function HeroSection() {
 
       <div className="relative z-20 text-center mb-12">
         <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 tracking-tighter">
-          Hi, I'm John Doe.
+          Got a minute? Here's what I've been working on.
         </h1>
         <p className="font-label-code text-label-code text-primary uppercase tracking-widest">
-          Talk to my Digital Twin.
+          QUICK QUESTIONS? ASK MY DIGITAL TWIN.
         </p>
       </div>
       {/* Chat Interface */}
