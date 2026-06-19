@@ -159,28 +159,28 @@ export default function HeroSection() {
             className="bg-cover bg-center rounded-xl border border-border-glass shadow-2xl bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqyzpAiY78mEi7HPmpnsuaf4src5Gbxf4bA6cya3M6wnWdbEt9Xw1uJgFXSMxX1QQD2LNJg2pbBX9PuS9RUce2E58Py9upeZmj5lFZmeRXIqiM9J8hHsHelhYz0DpuBEfI1bEh2vlNqrJ48dAvoYxq0KkcK2l0l68JJX95GOja12TDRud6nuUiigMp2yjsXjxxE1zKPS7EDoVSgH0o9LDY1sL7uiVRqZZLepTpArfyGG46BIcTmqmqe26RSe7GUkhbnmNXVObw')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbdZ7IStlvnhsc2-X6xSUwdcxlzSbmNlVNJPf4I1rXyFs0x01PIRq_Kxkrk5O3oDSvuIx8ZJq52gBLMQgUBOnJuS-EcbwmOtt-gef6Xj0BISQjztuvJN3tcq2BSBTWU4PfHYmw_XORZNb9bQcV8-A0osnCmzk7RzmBFClhXloiFIWq4sitaQNQp21AKgCmD_kJtFfBVrixdeKysk8oKUzygObEMSmQPLNV42HvlJZlflrKNl8EJ6LsT1ozYphiv7ssRCj_8oLY')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9DoESU36X5gq4_FqE-wtlNNgvV9PI-tEwEb9A9FJGbwF5wdgdPFxHdQDPrcw9QC71BAw0U0q6B3h5_PbA3fv49gomGfQm9gFJTbj4r711L27Us4Y1UFG3U5LQV0Fu8vbWpZq42AAO1V7LloBpD94bMCt13ibMlm-R22pUhuy5AqIh9oC5fkmKQrniNnqndmjATuQ7ymSv4vqdfVTWoPnv60_Doe3WRgvcYoij8hD7g6zVLE0awvFOeYEvUNhGyjy8OV3UmAIz')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCXsyyc40NbmHQmFe9Eqzyupv30dmAx2-KluuM02_QHdACFb-HMENtUOrXXQGYl4-hkZi3ED9rxkdnX5CTIsemRYvhfOH2uT2j4M0bh8vI88IKbxKgHJ1R-tEE5JuAR1Sm4MkR-EqE3pWa53nFV11lwQjwQnVD1VR7PtziLTxZRs2yLQeTBn7pQ1oPIr-LINkzRb8xa5ZouWGUAMmtCq6y-LrcnVFKqHj3vsj0_mnrn1eVBQetDpYs4eLGfcsRW49RQjFsksFiw')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0VsvRe7EfOQ9j1fhrefWKABWIOTFUrJyvNWfwS30jTfRCPrr1ofCqS7DoTrvBGWO-5oLzy5UtpWYHLq4Kl5oo3Uj0W5Za0eUfvw2dq3Ai3-3jBVp750OjywJAS_mNqxQIZQZgy4c4H603IEATHNy-IeaO6FXaM3tAH7UnQEHot0fIAorSVyeiYLsceItuaLU2m1thb8w6QkCTur_rcdta6oOs3kUq_PNkVitJ3GBdHp6T_QC3KTxpspNpN_GZgbrG5DqMtJpY')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuApvslf8pL1EVrriuBZ4tMGDUz-h7-Ngjtrm3kmUZ0wgyb5bZt5EIz3FD7FuwQPuhYg7pfFaP4ZYl4lLS7l9wRb_vcIkh-f0grXKU_iQVSKVXOfpo-FfliKpiY9EMqSbSDECN_ffXKnZYWucWkjjEY-FM_EDeimLw4eQkFOuuNHK92nzyddgglRyLd2VeosTiK_La_hfx2PNcFLKHicqjIi-eVbSwcNFv9UNej84HyLOMlECjPmX04tEm5msOjwEPZa3B7_Fukz')",
             }}
           ></div>
           <div
             className="bg-cover bg-center rounded-xl border border-border-glass opacity-60 bg-stellar-white"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVqzWNgrp_UZDp2jdWeCDspy5IrLS6lBYPcxGVYnnUCjlHXThuan6X6_ytzEFof0oRDfTqJYk17Uqg0jj4K-mptRlMOrDRRu3D06HcAIyuDjloEbPAmSnyzs6d5dhqG1XieUcfBE5tr372wj4RejY8Xrwy3InryiZ4dqv1QIwC8Nv3S7krEEDLjQsyOHlJIYWFuQbqcv3caU7RqFiE-VPkiUAqoTxBu6V5Wcav6GuTYKjncP0v6XVx0ZxT2mB-q_OXkCCaLeYz')",
+                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBU_kcqB6heU5vje-CfhyWj66PsARJBK45nXIvZmzeKQYVRfdQyQisNqo1VUeYEoNqnbPjdel981U26CY5Cltg_I5pUKg76cqtsPH1AIYC7mJYqkB3_IOHDYiYqTDN-wb5vPUrUK8Q2l7ZliIBFUsPm2pCJC2I70OKRaJUGLdICFlCPAUsV5U0ksw51-Li8z8NwfNDWZhnNg-3eV0ewrIelcKNQonAd-MDm9xHuSQOl8NbcMoEhm_BXKMOAwke20JkxUtC1QnkQ')",
             }}
           ></div>
         </div>
