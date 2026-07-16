@@ -50,3 +50,6 @@ next-env.d.ts
 
 # local Claude overrides (machine-specific)
 .claude/settings.local.json
+
+# agent skill definitions (not project code)
+.agents/

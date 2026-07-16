@@ -1,5 +1,8 @@
 @AGENTS.md
 
+## obsidian
+Before modifying any component, read `01-Projects/Dan-Portfolio/_claude-manifest.md` in the Obsidian vault for project context. On a new chat, start by reading the manifest.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
