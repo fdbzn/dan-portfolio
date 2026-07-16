@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { v4 as uuidv4 } from "uuid";
+import { gsap } from "gsap";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import Typewriter from "./Typewriter";
 import ParticleBackground, {
   ParticleBackgroundHandle,
@@ -27,7 +29,11 @@ export default function HeroSection() {
   const chatFeedRef = useRef<HTMLDivElement>(null);
   const particleRef = useRef<ParticleBackgroundHandle>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const desktopChatRef = useRef<HTMLDivElement>(null);
+  const bootOverlayRef = useRef<HTMLDivElement>(null);
+  const bootTextRef = useRef<HTMLSpanElement>(null);
   const isMobile = useIsMobile();
+  const [isBooting, setIsBooting] = useState(true);
 
   const handleTechStackClick = useCallback(() => {
     if (particleRef.current) {
@@ -92,6 +98,63 @@ export default function HeroSection() {
       document.body.style.overflow = "";
     };
   }, [isMobile, isChatOpen]);
+
+  // ─── GSAP Boot Animation ──────────────────────────────────────────
+  useEffect(() => {
+    gsap.registerPlugin(ScrambleTextPlugin);
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // 1. Scale-in the desktop chat container
+      if (desktopChatRef.current) {
+        tl.fromTo(
+          desktopChatRef.current,
+          { scaleY: 0, opacity: 0, transformOrigin: "top center" },
+          { scaleY: 1, opacity: 1, duration: 0.7 },
+        );
+      }
+
+      // 2. Scanline pulse
+      const scanline = desktopChatRef.current?.querySelector(".scanline");
+      if (scanline) {
+        tl.to(
+          scanline,
+          { opacity: 0.8, duration: 0.3 },
+          "-=0.4",
+        );
+        tl.to(scanline, { opacity: 0.15, duration: 0.5 });
+      }
+
+      // 3. Scramble the boot text
+      if (bootTextRef.current) {
+        tl.to(
+          bootTextRef.current,
+          {
+            duration: 2.2,
+            scrambleText: {
+              text: "WELCOME — DIGITAL_TWIN v3.1 READY",
+              chars:
+                "░▒▓█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789▲►◄",
+              speed: 0.6,
+            },
+            ease: "power2.inOut",
+          },
+          "-=0.3",
+        );
+      }
+
+      // 4. Fade out the boot overlay to reveal the chat
+      if (bootOverlayRef.current) {
+        tl.to(
+          bootOverlayRef.current,
+          { opacity: 0, duration: 0.4, onComplete: () => setIsBooting(false) },
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const handleSendMessage = useCallback(async () => {
     if (particleRef.current) {
@@ -169,6 +232,44 @@ export default function HeroSection() {
       handleSendMessage();
     }
   };
+
+  // ─── GSAP Input Interaction ──────────────────────────────────────
+  const handleInputFocus = useCallback(() => {
+    // Jitter effect on the chat container
+    if (desktopChatRef.current) {
+      gsap.to(desktopChatRef.current, {
+        x: "+=4",
+        duration: 0.04,
+        repeat: 3,
+        yoyo: true,
+        ease: "power1.inOut",
+        onComplete: () => {
+          gsap.set(desktopChatRef.current, { x: 0 });
+        },
+      });
+
+      // Smooth border glow transition
+      gsap.to(desktopChatRef.current, {
+        borderColor: "#6ddd81",
+        boxShadow:
+          "rgba(0, 0, 0, 0.5) 0px 0px 40px, rgba(109, 221, 129, 0.35) 0px 0px 25px",
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    }
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    if (desktopChatRef.current) {
+      gsap.to(desktopChatRef.current, {
+        borderColor: "rgba(255, 255, 255, 0.15)",
+        boxShadow:
+          "rgba(0, 0, 0, 0.5) 0px 0px 40px, rgba(173, 198, 255, 0.1) 0px 0px 20px",
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    }
+  }, []);
 
   const closeChat = useCallback(() => {
     setIsChatOpen(false);
@@ -328,6 +429,8 @@ export default function HeroSection() {
         <div className="relative">
           <input
             ref={inputRef}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
             className="w-full bg-void-black border border-border-glass rounded px-4 py-3 font-label-code text-primary focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
             placeholder="ENTER_SYSTEM_COMMAND..."
             style={{
@@ -415,6 +518,7 @@ export default function HeroSection() {
 
         {/* Chat Interface — inline */}
         <div
+          ref={desktopChatRef}
           className="relative z-30 w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden"
           style={{
             backgroundColor: "rgba(0, 36, 81, 0.95)",
@@ -424,6 +528,43 @@ export default function HeroSection() {
               "rgba(0, 0, 0, 0.5) 0px 0px 40px, rgba(173, 198, 255, 0.1) 0px 0px 20px",
           }}
         >
+          {/* Boot Overlay */}
+          {isBooting && (
+            <div
+              ref={bootOverlayRef}
+              className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-4"
+              style={{
+                backgroundColor: "rgba(0, 36, 81, 0.97)",
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              <div className="flex items-center gap-3 font-label-code">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{
+                    backgroundColor: "#6ddd81",
+                    boxShadow: "0 0 8px rgba(109,221,129,0.8)",
+                    animation: "pulse 1s ease-in-out infinite",
+                  }}
+                ></span>
+                <span
+                  ref={bootTextRef}
+                  className="text-lg tracking-widest uppercase"
+                  style={{ color: "#adc6ff" }}
+                >
+                  BOOT_SEQUENCE_INITIALIZING...
+                </span>
+              </div>
+              <div
+                className="h-px w-48"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, #6ddd81, transparent)",
+                  animation: "pulse 1.2s ease-in-out infinite",
+                }}
+              ></div>
+            </div>
+          )}
           {renderChatContent(false)}
         </div>
       </section>

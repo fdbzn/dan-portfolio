@@ -1,3 +1,8 @@
+"use client";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 const timelineData = [
   {
     role: "Sr. Technical Product Owner",
@@ -30,21 +35,84 @@ const timelineData = [
 ];
 
 export default function Timeline() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // 1. Scroll-linked progress line — draws from top to bottom
+      if (lineRef.current) {
+        gsap.fromTo(
+          lineRef.current,
+          { scaleY: 0, transformOrigin: "top center" },
+          {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 70%",
+              end: "bottom 30%",
+              scrub: 1.2,
+            },
+          },
+        );
+      }
+
+      // 2. Staggered card reveal — fade in + slide up chronologically
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        gsap.fromTo(
+          card,
+          { autoAlpha: 0, y: 20 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="timeline" className="scroll-mt-28 md:scroll-mt-24 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
+    <section ref={sectionRef} id="timeline" className="scroll-mt-28 md:scroll-mt-24 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
       <div className="w-full max-w-4xl mx-auto">
         <h2 className="font-headline-md text-2xl md:text-headline-md mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
           <span className="text-primary font-label-code text-sm tracking-widest">[ 01 ]</span>
           CORE_TIMELINE
         </h2>
         <div className="space-y-8 md:space-y-12 relative">
-          <div className="absolute left-[15px] top-0 bottom-0 w-px bg-gradient-to-b from-primary via-secondary to-transparent"></div>
-          
+          {/* Animated progress line */}
+          <div
+            ref={lineRef}
+            className="absolute left-[15px] top-0 bottom-0 w-px bg-gradient-to-b from-primary via-secondary to-transparent"
+            style={{ scaleY: 0, transformOrigin: "top center" }}
+          ></div>
+
           {timelineData.map((item, index) => (
-            <div key={index} className="relative pl-10 md:pl-12">
+            <div
+              key={index}
+              ref={(el) => {
+                cardsRef.current[index] = el!;
+              }}
+              className="relative pl-10 md:pl-12"
+            >
+              {/* Dot marker */}
               <div className={`absolute left-0 top-2 w-7 h-7 md:w-8 md:h-8 rounded-full bg-void-black border-2 ${index % 2 === 0 ? 'border-primary' : 'border-secondary'} flex items-center justify-center z-10`}>
                 <div className={`w-2 h-2 ${index % 2 === 0 ? 'bg-primary' : 'bg-secondary'} rounded-full ${index === 0 ? 'animate-pulse' : ''}`}></div>
               </div>
+              {/* Card */}
               <div className="glass-panel p-4 md:p-6 rounded-xl hover:bg-surface-container-low transition-colors group">
                 <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-start mb-2">
                   <div className="min-w-0">
