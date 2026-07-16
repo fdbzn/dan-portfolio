@@ -41,3 +41,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated knowledge graph (regenerated from source)
+/graphify-out/
+
+# local MCP/Obsidian config (contains auth token)
+.mcp.json
+
+# local Claude overrides (machine-specific)
+.claude/settings.local.json

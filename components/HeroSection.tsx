@@ -313,7 +313,10 @@ export default function HeroSection() {
           >
             TELL_ME_ABOUT_TECH_STACK
           </button>
-          <button className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300">
+          <button
+            onClick={handleTechStackClick}
+            className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300"
+          >
             VIEW_LATEST_PROJECTS
           </button>
           <button className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-tertiary/30 bg-tertiary/5 text-tertiary hover:bg-tertiary/20 hover:border-tertiary transition-all duration-300">
