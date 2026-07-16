@@ -164,10 +164,10 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
           {/* ── Single title — starts big+centered, shrinks to compact ── */}
           <div ref={titleRef} className="text-center shrink-0 mb-8 md:mb-12">
             <h2 className="font-headline-md text-headline-md mb-3 md:mb-4 tracking-tighter">
-              Featured <span className="text-plasma-orange">Case Studies</span>
+              Casos de Estudio <span className="text-plasma-orange">Destacados</span>
             </h2>
             <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-              A selection of digital products where I served as both technical lead and product visionary.
+              Una selección de productos digitales.
             </p>
           </div>
 
@@ -196,7 +196,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                           </>
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <span className="text-on-surface-variant font-label-code text-sm">NO_IMAGE</span>
+                            <span className="text-on-surface-variant font-label-code text-sm">SIN_IMAGEN</span>
                           </div>
                         )}
                       </div>
@@ -217,10 +217,10 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                         <div className="flex items-center gap-3">
                           <button onClick={() => openOverlay(i)}
                             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-void-black font-label-code text-xs font-bold hover:brightness-110 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-primary/20">
-                            VIEW_CASE_STUDY
+                            VER_CASO
                             <span className="material-symbols-outlined text-sm">open_in_new</span>
                           </button>
-                          <span className="text-border-glass font-label-code text-[10px] tracking-widest uppercase opacity-60">+{p.images.length - 1} images</span>
+                          <span className="text-border-glass font-label-code text-[10px] tracking-widest uppercase opacity-60">+{p.images.length - 1} imágenes</span>
                         </div>
                       </div>
                     </div>
@@ -284,7 +284,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 </div>
               ) : (
                 <div className="h-[30vh] md:h-[40vh] flex items-center justify-center">
-                  <span className="text-on-surface-variant font-label-code text-sm">NO_IMAGE</span>
+                  <span className="text-on-surface-variant font-label-code text-sm">SIN_IMAGEN</span>
                 </div>
               )}
               <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/30 to-transparent pointer-events-none z-10" />

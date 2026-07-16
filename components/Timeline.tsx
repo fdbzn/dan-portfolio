@@ -90,7 +90,7 @@ export default function Timeline() {
       <div className="w-full max-w-4xl mx-auto">
         <h2 className="font-headline-md text-2xl md:text-headline-md mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
           <span className="text-primary font-label-code text-sm tracking-widest">[ 01 ]</span>
-          CORE_TIMELINE
+          LINEA_DE_TIEMPO
         </h2>
         <div className="space-y-8 md:space-y-12 relative">
           {/* Animated progress line */}

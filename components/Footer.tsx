@@ -13,7 +13,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-2 px-2 py-1">
             <div className="w-2 h-2 rounded-full bg-secondary animate-pulse shrink-0"></div>
-            <span className="text-secondary-fixed font-bold whitespace-nowrap">STATUS: ONLINE</span>
+            <span className="text-secondary-fixed font-bold whitespace-nowrap">ESTADO: EN LÍNEA</span>
           </div>
         </div>
       </div>

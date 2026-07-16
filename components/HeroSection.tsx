@@ -75,7 +75,7 @@ export default function HeroSection() {
     setChatHistory([
       {
         id: uuidv4(),
-        text: "Welcome! I'm Daniel's digital twin, powered by RAG architecture to provide real, precise information about his professional journey. I'm here to clear up your questions about his tools, experience, or past projects. What would you like to know?",
+        text: "¡Bienvenido! Soy el gemelo digital de Daniel, impulsado por arquitectura RAG para proporcionar información real y precisa sobre su trayectoria profesional. Estoy aquí para resolver tus dudas sobre sus herramientas, experiencia o proyectos anteriores. ¿Qué te gustaría saber?",
         sender: "twin",
       },
     ]);
@@ -133,7 +133,7 @@ export default function HeroSection() {
           {
             duration: 2.2,
             scrambleText: {
-              text: "WELCOME — DIGITAL_TWIN v3.1 READY",
+              text: "BIENVENIDO — GEMELO_DIGITAL v3.1 LISTO",
               chars:
                 "░▒▓█ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789▲►◄",
               speed: 0.6,
@@ -208,7 +208,7 @@ export default function HeroSection() {
         console.error("Unexpected response format:", data);
         const errorMessage: Message = {
           id: uuidv4(),
-          text: "Received an unexpected response from the server. Please try again.",
+          text: "Recibí una respuesta inesperada del servidor. Intenta de nuevo.",
           sender: "twin",
         };
         setChatHistory((prev) => [...prev, errorMessage]);
@@ -217,7 +217,7 @@ export default function HeroSection() {
       console.error("Error sending message:", error);
       const errorMessage: Message = {
         id: uuidv4(),
-        text: "Sorry, I'm having trouble connecting to my core logic. Please try again later.",
+        text: "Lo siento, tengo problemas para conectarme con mi lógica central. Intenta de nuevo más tarde.",
         sender: "twin",
       };
       setChatHistory((prev) => [...prev, errorMessage]);
@@ -292,7 +292,7 @@ export default function HeroSection() {
         <div className="flex items-center gap-2 md:gap-3 min-w-0">
           <div className="w-3 h-3 rounded-full bg-secondary shadow-[0_0_8px_rgba(109,221,129,0.8)] shrink-0"></div>
           <span className="font-label-code text-xs md:text-label-code text-on-surface-variant truncate">
-            DANIEL BAZÁN: ACTIVE
+            DANIEL BAZÁN: ACTIVO
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -300,7 +300,7 @@ export default function HeroSection() {
             <button
               onClick={closeChat}
               className="w-7 h-7 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
-              aria-label="Close chat"
+              aria-label="Cerrar chat"
             >
               <span className="material-symbols-outlined text-lg">close</span>
             </button>
@@ -390,7 +390,7 @@ export default function HeroSection() {
                 color: "#e0e0e0",
               }}
             >
-              <span className="text-primary-fixed-dim">QUERY_EXECUTING...</span>
+              <span className="text-primary-fixed-dim">EJECUTANDO_CONSULTA...</span>
             </div>
           </div>
         )}
@@ -412,16 +412,16 @@ export default function HeroSection() {
             onClick={handleTechStackClick}
             className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-primary/30 bg-primary/5 text-primary hover:bg-primary/20 hover:border-primary transition-all duration-300"
           >
-            TELL_ME_ABOUT_TECH_STACK
+            MI_TECH_STACK
           </button>
           <button
             onClick={handleTechStackClick}
             className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/20 hover:border-secondary transition-all duration-300"
           >
-            VIEW_LATEST_PROJECTS
+            PROYECTOS_RECIENTES
           </button>
           <button className="px-2.5 py-2 md:px-3 md:py-1.5 rounded border border-tertiary/30 bg-tertiary/5 text-tertiary hover:bg-tertiary/20 hover:border-tertiary transition-all duration-300">
-            HOW_DO_YOU_LEAD_TEAMS?
+            COMO_LIDERAS_EQUIPOS?
           </button>
         </div>
 
@@ -432,7 +432,7 @@ export default function HeroSection() {
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             className="w-full bg-void-black border border-border-glass rounded px-4 py-3 font-label-code text-primary focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
-            placeholder="ENTER_SYSTEM_COMMAND..."
+            placeholder="INGRESA_UN_COMANDO..."
             style={{
               backgroundColor: "rgb(255, 255, 255)",
               color: "rgb(0, 36, 81)",
@@ -505,14 +505,14 @@ export default function HeroSection() {
           <h1 className="font-display-lg text-2xl sm:text-3xl md:text-5xl mb-3 md:mb-4 tracking-tighter leading-tight">
             <Typewriter
               parts={[
-                "Got a minute? ",
+                "¿Un minuto? ",
                 1000,
-                "Here's what I've been working on.",
+                "Esto es en lo que he estado trabajando.",
               ]}
             />
           </h1>
           <p className="font-label-code text-xs sm:text-sm md:text-xl text-primary uppercase tracking-widest max-w-xs sm:max-w-none mx-auto">
-            QUICK QUESTIONS? ASK MY DIGITAL TWIN.
+            ¿PREGUNTAS RÁPIDAS? HABLA CON MI GEMELO DIGITAL.
           </p>
         </div>
 
@@ -552,7 +552,7 @@ export default function HeroSection() {
                   className="text-lg tracking-widest uppercase"
                   style={{ color: "#adc6ff" }}
                 >
-                  BOOT_SEQUENCE_INITIALIZING...
+                  INICIALIZANDO_SECUENCIA...
                 </span>
               </div>
               <div
@@ -616,14 +616,14 @@ export default function HeroSection() {
         <h1 className="font-display-lg text-2xl sm:text-3xl md:text-5xl mb-3 md:mb-4 tracking-tighter leading-tight">
           <Typewriter
             parts={[
-              "Got a minute? ",
+              "¿Un minuto? ",
               1000,
-              "Here's what I've been working on.",
+              "Esto es en lo que he estado trabajando.",
             ]}
           />
         </h1>
         <p className="font-label-code text-xs sm:text-sm md:text-xl text-primary uppercase tracking-widest max-w-xs sm:max-w-none mx-auto">
-          QUICK QUESTIONS? ASK MY DIGITAL TWIN.
+          ¿PREGUNTAS RÁPIDAS? HABLA CON MI GEMELO DIGITAL.
         </p>
       </div>
 
@@ -645,7 +645,7 @@ export default function HeroSection() {
         >
           smart_toy
         </span>
-        <span>ASK MY DIGITAL TWIN</span>
+        <span>HABLA CON MI GEMELO DIGITAL</span>
         <span className="material-symbols-outlined text-lg text-primary">
           arrow_upward
         </span>

@@ -30,7 +30,7 @@ export default function TechnicalArsenal() {
     <section id="skills" className="scroll-mt-28 md:scroll-mt-24 max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24 border-t border-border-glass">
       <h2 className="font-headline-md text-2xl md:text-headline-md mb-8 md:mb-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
         <span className="text-secondary font-label-code text-sm tracking-widest">[ 02 ]</span>
-        TECHNICAL_ARSENAL
+        ARSENAL_TÉCNICO
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {technicalSkills.map((category, index) => (
