@@ -9,10 +9,19 @@ export interface EnrichedProject extends Project {
   architectureTags: string[];
 }
 
+export interface RichTextNode {
+  nodeType: string;
+  value?: string;
+  content?: RichTextNode[];
+  marks?: Array<{ type: string }>;
+  data?: Record<string, unknown>;
+}
+
 export interface Project {
   title: string;
   description: string;
   fullDescription: string;
+  richDescription: RichTextNode;
   tags: string[];
   images: string[];
   borderColor: string;

@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Project } from "@/types/project";
-import { enrichProject } from "@/data/projects-content";
+import RichTextRenderer from "@/components/RichTextRenderer";
 
 // ══════════════════════════════════════════════════════════════
 export default function ProjectsGallery({ projects }: { projects: Project[] }) {
@@ -151,7 +151,6 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   useEffect(() => { return () => { document.body.style.overflow = ""; }; }, []);
 
   const overlayProject = overlayIndex !== null ? projects[overlayIndex] : null;
-  const enriched = overlayProject ? enrichProject(overlayProject) : null;
 
   return (
     <>
@@ -180,18 +179,21 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 <div
                   key={i}
                   data-flip-id={i}
-                  className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+                  className={`absolute inset-0 transition-all duration-700 ease-out ${
                     i === activeIndex
-                      ? "opacity-100 pointer-events-auto"
-                      : "opacity-0 pointer-events-none"
+                      ? "opacity-100 pointer-events-auto scale-100"
+                      : "opacity-0 pointer-events-none scale-[0.96]"
                   }`}
                 >
                   <div className="h-full flex items-center">
-                    <div className={`w-full glass-panel rounded-2xl overflow-hidden border-t-4 ${p.borderColor} bg-surface-container-low flex flex-col md:flex-row max-h-full`}>
+                    <div className={`w-full glass-panel rounded-2xl overflow-hidden border-t-2 ${p.borderColor} bg-surface-container-low/80 backdrop-blur-sm flex flex-col md:flex-row max-h-full shadow-xl shadow-black/20 transition-shadow duration-500 hover:shadow-2xl hover:shadow-black/30`}>
                       {/* Image side */}
-                      <div className="relative w-full md:w-1/2 aspect-video md:aspect-auto md:min-h-[300px] shrink-0 overflow-hidden bg-black/10">
+                      <div className="relative w-full md:w-1/2 aspect-video md:aspect-auto md:min-h-[300px] shrink-0 overflow-hidden bg-black/10 group/image">
                         {p.images.length > 0 ? (
-                          <img src={p.images[0]} alt={p.title} className="w-full h-full object-contain" loading="lazy" />
+                          <>
+                            <img src={p.images[0]} alt={p.title} className="w-full h-full object-contain transition-transform duration-700 group-hover/image:scale-105" loading="lazy" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                          </>
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <span className="text-on-surface-variant font-label-code text-sm">NO_IMAGE</span>
@@ -199,24 +201,26 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                         )}
                       </div>
 
-                      {/* Content side */}
-                      <div className="flex flex-col justify-center p-6 md:p-10 md:w-1/2 overflow-y-auto">
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {p.tags.slice(0, 3).map((tag, ti) => (
-                            <span key={ti} className="px-2 py-0.5 rounded border border-plasma-orange/30 bg-plasma-orange/5 text-plasma-orange text-[10px] font-label-code">{tag}</span>
+                      {/* Content side — minimal: image, title, CTA */}
+                      <div className="flex flex-col justify-center p-6 md:p-8 md:w-1/2 overflow-y-auto relative">
+                        {/* Glow accent matching border color */}
+                        <div className={`absolute top-0 right-0 w-32 h-32 opacity-10 blur-3xl rounded-full pointer-events-none ${p.borderColor.replace('border-t-', 'bg-')}`} />
+
+                        <div className="flex flex-wrap gap-2 mb-5">
+                          {p.tags.slice(0, 2).map((tag, ti) => (
+                            <span key={ti} className="px-2.5 py-1 rounded-full border border-border-glass bg-surface-container-high/40 text-on-surface-variant text-[10px] font-label-code">{tag}</span>
                           ))}
                         </div>
 
-                        <h3 className="font-headline-md text-xl md:text-2xl text-on-surface mb-3">{p.title}</h3>
+                        <h3 className="font-headline-md text-2xl md:text-3xl text-on-surface mb-6 tracking-tight">{p.title}</h3>
 
-                        <p className="text-on-surface-variant text-sm md:text-base leading-relaxed mb-6 line-clamp-4">{p.description}</p>
-
-                        <div>
+                        <div className="flex items-center gap-3">
                           <button onClick={() => openOverlay(i)}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-void-black font-label-code text-xs font-bold hover:brightness-110 transition-all">
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-void-black font-label-code text-xs font-bold hover:brightness-110 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-primary/20">
                             VIEW_CASE_STUDY
                             <span className="material-symbols-outlined text-sm">open_in_new</span>
                           </button>
+                          <span className="text-border-glass font-label-code text-[10px] tracking-widest uppercase opacity-60">+{p.images.length - 1} images</span>
                         </div>
                       </div>
                     </div>
@@ -267,7 +271,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
       </section>
 
       {/* ── Overlay Portal ──────────────────────────────────────────── */}
-      {mounted && overlayIndex !== null && overlayProject && enriched && createPortal(
+      {mounted && overlayIndex !== null && overlayProject && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
           <div ref={overlayRef} data-overlay-bg className="absolute inset-0 bg-black cursor-pointer" onClick={closeOverlay} />
           <div ref={panelRef} className="relative z-10 w-full max-w-4xl max-h-[85vh] mx-auto rounded-2xl border border-border-glass shadow-2xl bg-surface-container-low flex flex-col overflow-hidden">
@@ -290,37 +294,8 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 {overlayProject.tags.map((tag, ti) => (<span key={ti} className="px-3 py-1 rounded border border-plasma-orange/30 bg-plasma-orange/5 text-plasma-orange text-xs font-label-code">{tag}</span>))}
               </div>
               <h3 className="panel-fade-item font-headline-md text-2xl md:text-3xl text-on-surface mb-4">{overlayProject.title}</h3>
-              <div className="panel-fade-item mb-6">
-                <h4 className="font-label-code text-xs text-primary tracking-widest uppercase mb-2">PRODUCT_VISION</h4>
-                <p className="text-on-surface-variant text-sm md:text-base leading-relaxed">{enriched.productVision}</p>
-              </div>
-              <p className="panel-fade-item text-on-surface-variant text-sm md:text-base leading-relaxed mb-6">{overlayProject.fullDescription}</p>
-              {enriched.challenges.length > 0 && (
-                <div className="panel-fade-item space-y-4 mb-6">
-                  <h4 className="font-label-code text-sm text-primary tracking-widest uppercase">ARCHITECTURAL_CHALLENGES</h4>
-                  {enriched.challenges.map((c, ci) => (
-                    <div key={ci} className="border-l-2 border-primary pl-4">
-                      <p className="font-label-code text-xs text-primary mb-1">CHALLENGE</p>
-                      <p className="text-on-surface text-sm mb-2">{c.challenge}</p>
-                      <p className="font-label-code text-xs text-secondary mb-1">SOLUTION</p>
-                      <p className="text-on-surface-variant text-sm">{c.solution}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {enriched.architectureTags.length > 0 && (
-                <div className="panel-fade-item mb-6">
-                  <h4 className="font-label-code text-sm text-primary tracking-widest uppercase mb-3">ARCHITECTURE</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {enriched.architectureTags.map((tag, ti) => (<span key={ti} className="px-3 py-1.5 rounded-full border border-border-glass bg-surface-container-high/60 text-on-surface text-xs font-label-code">{tag}</span>))}
-                  </div>
-                </div>
-              )}
-              <div className="panel-fade-item space-y-4">
-                <h4 className="font-label-code text-sm text-primary tracking-widest uppercase">KEY_HIGHLIGHTS</h4>
-                <ul className="space-y-3">
-                  {overlayProject.highlights.map((h, hi) => (<li key={hi} className="flex items-start gap-3 text-sm md:text-base text-on-surface"><span className="text-primary mt-1 shrink-0">◆</span>{h}</li>))}
-                </ul>
+              <div className="panel-fade-item text-on-surface-variant text-sm md:text-base leading-relaxed">
+                <RichTextRenderer node={overlayProject.richDescription} />
               </div>
             </div>
             <button onClick={closeOverlay} className="absolute top-4 left-4 z-30 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/70 transition-all" aria-label="Close">

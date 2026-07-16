@@ -2,6 +2,7 @@ import type {
   ContentfulProjectFields,
   ContentfulAsset,
   Project,
+  RichTextNode,
 } from "@/types/project";
 
 const CONTENTFUL_BASE =
@@ -24,14 +25,19 @@ async function cfFetch<T>(path: string): Promise<T> {
 }
 
 // ── Extract plain text from Rich Text ─────────────────────────
-function extractPlainText(richText: ContentfulProjectFields["projectDesc"]): string {
+function collectTexts(node: RichTextNode): string[] {
   const texts: string[] = [];
-  for (const block of richText.content ?? []) {
-    for (const inline of block.content ?? []) {
-      if (inline.value) texts.push(inline.value);
-    }
+  if (node.value) {
+    texts.push(node.value);
   }
-  return texts.join("\n");
+  for (const child of node.content ?? []) {
+    texts.push(...collectTexts(child));
+  }
+  return texts;
+}
+
+function extractPlainText(richText: ContentfulProjectFields["projectDesc"]): string {
+  return collectTexts(richText as unknown as RichTextNode).join("\n");
 }
 
 // ── Border color palette (cycled per project) ─────────────────
@@ -109,7 +115,9 @@ export async function getProjects(): Promise<Project[]> {
         title: projectName,
         description: plainDescription || projectName,
         fullDescription: fullDesc || fallback.fullDescription,
+        richDescription: projectDesc as unknown as RichTextNode,
         tags: extractTags(entry),
+        images: imageUrls,
         images: imageUrls,
         borderColor: BORDER_COLORS[index % BORDER_COLORS.length],
         highlights: fallback.highlights,
