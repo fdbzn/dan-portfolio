@@ -258,12 +258,18 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
     const panel = panelRef.current;
     const overlay = overlayRef.current;
 
+    // Calculate offset from viewport center to card center
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const offsetX = rect.left + rect.width / 2 - vw / 2;
+    const offsetY = rect.top + rect.height / 2 - vh / 2;
+
     gsap.set(panel, {
       autoAlpha: 1,
       scaleX: 0,
       scaleY: 0,
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
+      x: offsetX,
+      y: offsetY,
       transformOrigin: "center center",
     });
     gsap.set(overlay, { autoAlpha: 0 });
@@ -295,8 +301,10 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
     let rx = 0, ry = 0;
     if (card) {
       const r = card.getBoundingClientRect();
-      rx = r.left + r.width / 2;
-      ry = r.top + r.height / 2;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      rx = r.left + r.width / 2 - vw / 2;
+      ry = r.top + r.height / 2 - vh / 2;
     }
 
     const tl = gsap.timeline({
