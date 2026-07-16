@@ -49,6 +49,7 @@ function CardImageStack({ images }: { images: string[] }) {
       };
 
       const el = containerRef.current;
+      if (!el) return;
       el.addEventListener("mouseenter", fanOut);
       el.addEventListener("mouseleave", fanIn);
 
