@@ -97,7 +97,7 @@ export default function Timeline() {
           <div
             ref={lineRef}
             className="absolute left-[15px] top-0 bottom-0 w-px bg-gradient-to-b from-primary via-secondary to-transparent"
-            style={{ scaleY: 0, transformOrigin: "top center" }}
+            style={{ transform: "scaleY(0)", transformOrigin: "top center" }}
           ></div>
 
           {timelineData.map((item, index) => (
