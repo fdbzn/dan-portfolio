@@ -1,3 +1,14 @@
+export interface ChallengePair {
+  challenge: string;
+  solution: string;
+}
+
+export interface EnrichedProject extends Project {
+  productVision: string;
+  challenges: ChallengePair[];
+  architectureTags: string[];
+}
+
 export interface Project {
   title: string;
   description: string;
