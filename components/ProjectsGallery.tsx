@@ -2,71 +2,232 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { gsap } from "gsap";
+import type { Project } from "@/types/project";
 
-const projects = [
-  {
-    title: "Viva Aerobus Projects",
-    description:
-      "Definition of API standards and core/satellite integrations for projects like Avasa (Rental Car), Events, Insurance (Hopper, Telasist), Uber, Taxis MTY, Shuttles.",
-    fullDescription:
-      "As Sr. Technical Product Owner at Viva Aerobus, I led the definition of API standards and core/satellite integrations across multiple high-impact projects. I drove Front-End technical leadership covering architecture, UI/UX, and web performance optimization, while managing the technical backlog, SDLC processes, CI/CD pipelines, external provider relationships, and QA (E2E) strategies.",
-    tags: ["Python", "NodeJS", "AWS", "Azure", "GitLab CI/CD"],
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAyyOUZUG6uGsT3kZFBUczzmv41Yxe1Wfa7wL0cL2YzuWrsKwIx_4NJqDlnz3lDYUhE-cEAEcFWGorbjFafhyEUPaT4OdSIgMmcl-ze1CvbOeRo3Ogol9PhNFtyxmozymlKHmIeRAtgAyxhdm-Z5g6syEMPiCoMDD7sMcblCFLJIpGLZU1wbC0gKLRanRN6z9wbMZnJFkhbfjdfQdANe1fWAyBBh8nWVr8M2EC8Om9d3ujdP9JZrRN5CYZHmhixQ42j1q1MukA7",
-    borderColor: "border-t-plasma-orange",
-    highlights: [
-      "Led API standardization across 7+ integration partners",
-      "Defined core/satellite architecture for microservices",
-      "Managed technical backlog and cross-team coordination",
-      "Implemented CI/CD pipelines and QA strategies",
-    ],
-  },
-  {
-    title: "Profuturo E-commerce",
-    description:
-      "Cloud architecture design and e-commerce leadership for projects like E-commerce Site, Loyalty, Lead Scoring, Data Leak, Loans, WhatsApp, Callcenter.",
-    fullDescription:
-      "As E-commerce Specialist Consultant at Profuturo, I designed cloud architectures and led e-commerce initiatives across multiple digital products. I ensured WCAG 2.1 AA regulatory compliance while optimizing UX through data-driven strategies. I automated marketing workflows with Adobe Marketo and implemented comprehensive E2E testing frameworks.",
-    tags: ["Python", "NodeJS", "Vue.js", "React.js", "Next.js"],
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCqkiqAd4ZHyXUhjjGaCNmMmOtvvIdZARNlQ3-oD33mGOMt77kv939oNfDIaGJSWyg2bziOcP5dab2un-oQygpL4rDKiftlgdyV3FZ_DNo1Sb0I2dV01_gA2kQ6q7XXP2lNKmGVC2QDsoBmPeLouosskjpuiHOUJyY3vCnp88E4cfklkV54U200Hwfcb3KlZyVS7Ph77SwS4bI2IvedAD08ZoZE0x-6M7tEeLw2mVnkPjQIvi2kyGSvZh3y8sa2cvbSZ9a4hp73",
-    borderColor: "border-t-primary",
-    highlights: [
-      "Architected cloud-native e-commerce platform serving 4M+ users",
-      "Achieved WCAG 2.1 AA compliance across all user flows",
-      "Drove data-driven UX optimization increasing conversion by 25%",
-      "Automated marketing workflows with Adobe Marketo integration",
-    ],
-  },
-  {
-    title: "Catorce Días Agency Projects",
-    description:
-      "Requirements analysis, estimates, database design and full-stack/mobile development for clients like Philadelphia, Oreo, Tang, KFC, OfficeMax, Nestlé Nido, Trident.",
-    fullDescription:
-      "As Tech Lead and Full Stack Developer at Catorce Días Agency, I led requirements analysis through Design Sprint methodologies, provided accurate estimations, designed databases, and delivered full-stack web and mobile solutions for Fortune 500 brands. I also managed server and cloud infrastructure administration across AWS and Azure.",
-    tags: ["NodeJS", "PHP", "MySQL", "MongoDB", "React Native"],
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDjg6nzyIO7IT9-ekXxVSRyvYIJf6b21TPlrV_RYicb_THgreirm67sc-yw03o7H1yNv1QQG3vQY1aRmwNhbIpUuptcn4mHPr3ZMlPgN0kPAVilkmQli24KIiVBra7mfoGyphaD8Hjt8MP8_G7L0V3pPVXyhuQyGUQn9r3rOarRgv6D3kbz6jKnfM5wZHfvBzg_U5Q0Tk0CeaUxVF-DBSjnvFJLwlC8W2bwHTz4AM5jo_OD8vvG0ojhrvlM2fVSvFFyFA0dNJ5c",
-    borderColor: "border-t-secondary",
-    highlights: [
-      "Delivered 15+ projects for Fortune 500 brands",
-      "Led full-stack teams across web and mobile (React Native)",
-      "Designed databases and cloud infrastructure for scalability",
-      "Managed end-to-end delivery from Design Sprint to deployment",
-    ],
-  },
-];
+// ── Config ───────────────────────────────────────────────────
+const MAX_STACK_ITEMS = 3;
+const STACK_ROTATIONS = [0, 2, -4]; // deg, per image index
+const STACK_Y = [0, 2, 5];          // px offset per image index
 
-export default function ProjectsGallery() {
+// ── Card Image Stack ──────────────────────────────────────────
+function CardImageStack({ images }: { images: string[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const mm = useRef<gsap.MatchMedia | null>(null);
+
+  // Stack only for 2+ images
+  const visible = images.slice(0, MAX_STACK_ITEMS);
+  const isStack = visible.length >= 2;
+
+  useEffect(() => {
+    if (!isStack || !containerRef.current) return;
+
+    mm.current = gsap.matchMedia();
+    mm.current.add("(prefers-reduced-motion: no-preference)", () => {
+      const els = itemsRef.current.filter(Boolean) as HTMLDivElement[];
+
+      const fanOut = () => {
+        gsap.to(els, {
+          y: (i) => STACK_Y[i] * -2,
+          rotation: (i) => STACK_ROTATIONS[i] * 1.5,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+
+      const fanIn = () => {
+        gsap.to(els, {
+          y: 0,
+          rotation: 0,
+          duration: 0.3,
+          stagger: 0.03,
+          ease: "power2.in",
+          overwrite: "auto",
+        });
+      };
+
+      const el = containerRef.current;
+      el.addEventListener("mouseenter", fanOut);
+      el.addEventListener("mouseleave", fanIn);
+
+      return () => {
+        el.removeEventListener("mouseenter", fanOut);
+        el.removeEventListener("mouseleave", fanIn);
+      };
+    });
+
+    return () => mm.current?.revert();
+  }, [isStack]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative aspect-video overflow-hidden"
+    >
+      {visible.map((url, i) => (
+        <div
+          key={i}
+          ref={(el) => { itemsRef.current[i] = el; }}
+          className="absolute inset-0 flex items-center justify-center transition-shadow duration-300"
+          style={{
+            zIndex: visible.length - i,
+            // Base stack offset (collapsed state)
+            transform: isStack
+              ? `translateY(${STACK_Y[i]}px) rotate(${STACK_ROTATIONS[i]}deg)`
+              : undefined,
+          }}
+        >
+          <img
+            src={url}
+            alt={`Project image ${i + 1}`}
+            className="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </div>
+      ))}
+      {/* Gradient overlay at bottom for readability */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+    </div>
+  );
+}
+
+// ── Modal Gallery (horizontal scroll-snap) ──────────────────────
+function ModalImageGallery({ images }: { images: string[] }) {
+  const [current, setCurrent] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<HTMLDivElement>(null);
+
+  // Sync active dot on scroll
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || images.length < 2) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute("data-idx"));
+            if (!isNaN(idx)) setCurrent(idx);
+          }
+        }
+      },
+      { root: el, threshold: 0.6 },
+    );
+    const children = el.querySelectorAll("[data-idx]");
+    children.forEach((c) => observer.observe(c));
+    return () => observer.disconnect();
+  }, [images]);
+
+  const scrollTo = useCallback((idx: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const child = el.querySelector<HTMLDivElement>(`[data-idx="${idx}"]`);
+    if (!child) return;
+    child.scrollIntoView({ behavior: "smooth", inline: "start" });
+  }, []);
+
+  if (images.length === 0) {
+    return (
+      <div className="w-full h-full bg-surface-container-highest flex items-center justify-center">
+        <span className="text-on-surface-variant font-label-code text-sm">NO_IMAGE_AVAILABLE</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full bg-black/10">
+      {/* Scrollable track */}
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto snap-x snap-mandatory h-full"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {images.map((url, i) => (
+          <div
+            key={i}
+            data-idx={i}
+            className="snap-start shrink-0 w-full h-full flex items-center justify-center bg-black/20"
+          >
+            <img
+              src={url}
+              alt={`Project screenshot ${i + 1}`}
+              className="w-full h-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/30 to-transparent pointer-events-none z-10" />
+
+      {/* Navigation arrows */}
+      {images.length >= 2 && (
+        <>
+          <button
+            onClick={() => scrollTo(current - 1)}
+            disabled={current === 0}
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white hover:bg-black/60 transition-all hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            aria-label="Previous image"
+          >
+            <span className="material-symbols-outlined text-lg">chevron_left</span>
+          </button>
+          <button
+            onClick={() => scrollTo(current + 1)}
+            disabled={current === images.length - 1}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white hover:bg-black/60 transition-all hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+            aria-label="Next image"
+          >
+            <span className="material-symbols-outlined text-lg">chevron_right</span>
+          </button>
+        </>
+      )}
+
+      {/* Dots */}
+      {images.length >= 2 && (
+        <div
+          ref={dotsRef}
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2"
+        >
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === current
+                  ? "bg-white w-5 shadow-[0_0_8px_rgba(255,255,255,0.5)]"
+                  : "bg-white/40 hover:bg-white/70 w-2"
+              }`}
+              aria-label={`Go to image ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Counter */}
+      {images.length >= 2 && (
+        <div className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/10">
+          <span className="text-white/80 text-xs font-label-code tabular-nums">
+            {current + 1} / {images.length}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════
+// MAIN COMPONENT
+// ══════════════════════════════════════════════════════════════
+export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<gsap.core.Timeline | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     return () => { animRef.current?.kill(); void 0; };
@@ -77,8 +238,6 @@ export default function ProjectsGallery() {
     const card = document.querySelector<HTMLDivElement>(`[data-card="${index}"]`);
     if (!card) return;
     setSelectedIndex(index);
-    // card rect will be read in the post-render effect
-    // store it temporarily on the ref
     const rect = card.getBoundingClientRect();
     card.dataset.rect = JSON.stringify({ top: rect.top, left: rect.left, width: rect.width, height: rect.height });
   }, []);
@@ -99,7 +258,6 @@ export default function ProjectsGallery() {
     const panel = panelRef.current;
     const overlay = overlayRef.current;
 
-    // Start from card position, slightly scaled down
     gsap.set(panel, {
       autoAlpha: 1,
       scaleX: 0,
@@ -116,24 +274,12 @@ export default function ProjectsGallery() {
     tl.to(overlay, { autoAlpha: 0.65, duration: 0.3 }, 0);
 
     // Panel zoom in
-    tl.to(panel, {
-      scaleX: 1,
-      scaleY: 1,
-      x: 0,
-      y: 0,
-      duration: 0.6,
-      ease: "power3.inOut",
-    }, 0);
+    tl.to(panel, { scaleX: 1, scaleY: 1, x: 0, y: 0, duration: 0.6, ease: "power3.inOut" }, 0);
 
     // Content stagger
     const items = panel.querySelectorAll(".panel-fade-item");
     if (items.length) {
-      tl.fromTo(
-        items,
-        { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05 },
-        "-=0.2",
-      );
+      tl.fromTo(items, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.05 }, "-=0.2");
     }
 
     animRef.current = tl;
@@ -145,7 +291,6 @@ export default function ProjectsGallery() {
 
     animRef.current?.kill();
 
-    // Get card rect again for reverse animation
     const card = document.querySelector<HTMLDivElement>(`[data-card="${selectedIndex}"]`);
     let rx = 0, ry = 0;
     if (card) {
@@ -163,18 +308,7 @@ export default function ProjectsGallery() {
     });
 
     tl.to(overlayRef.current, { autoAlpha: 0, duration: 0.25 }, 0);
-    tl.to(
-      panelRef.current,
-      {
-        scaleX: 0,
-        scaleY: 0,
-        x: rx,
-        y: ry,
-        duration: 0.4,
-        ease: "power3.inOut",
-      },
-      0,
-    );
+    tl.to(panelRef.current, { scaleX: 0, scaleY: 0, x: rx, y: ry, duration: 0.4, ease: "power3.inOut" }, 0);
 
     animRef.current = tl;
   }, [selectedIndex]);
@@ -221,10 +355,9 @@ export default function ProjectsGallery() {
                 onClick={() => openModal(i)}
                 className={`glass-panel rounded-xl overflow-hidden flex flex-col border-t-4 ${p.borderColor} hover:scale-[1.02] transition-transform duration-500 bg-surface-container-low cursor-pointer group`}
               >
-                <div
-                  className="h-40 md:h-48 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url('${p.image}')` }}
-                />
+                {/* Image stack preview */}
+                <CardImageStack images={p.images} />
+
                 <div className="p-4 md:p-6 flex flex-col flex-1">
                   <div className="flex flex-wrap gap-2 mb-4">
                     {p.tags.slice(0, 3).map((tag, ti) => (
@@ -267,7 +400,7 @@ export default function ProjectsGallery() {
         selectedIndex !== null &&
         project &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Overlay */}
             <div
               ref={overlayRef}
@@ -275,19 +408,19 @@ export default function ProjectsGallery() {
               onClick={closeModal}
             />
 
-            {/* Panel */}
+            {/* Panel — image ~50%/scrollable text below */}
             <div
               ref={panelRef}
-              className="relative z-10 w-full max-w-4xl max-h-[90vh] mx-4 overflow-y-auto rounded-2xl border border-border-glass shadow-2xl bg-surface-container-low"
+              className="relative z-10 w-full max-w-4xl max-h-[85vh] mx-auto rounded-2xl border border-border-glass shadow-2xl bg-surface-container-low flex flex-col overflow-hidden"
               style={{ visibility: "hidden" }}
             >
-              {/* Hero image */}
-              <div
-                className="panel-fade-item w-full h-48 md:h-56 bg-cover bg-center rounded-t-2xl"
-                style={{ backgroundImage: `url('${project.image}')` }}
-              />
+              {/* Image gallery section — capped at ~50% viewport */}
+              <div className="relative w-full h-[40vh] min-h-[240px] max-h-[50vh] shrink-0">
+                <ModalImageGallery images={project.images} />
+              </div>
 
-              <div className="p-6 md:p-8">
+              {/* Text content — scrollable */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-8">
                 {/* Tags */}
                 <div className="panel-fade-item flex flex-wrap gap-2 mb-4">
                   {project.tags.map((tag, ti) => (
@@ -329,13 +462,13 @@ export default function ProjectsGallery() {
                 </div>
               </div>
 
-              {/* Close button inside panel */}
+              {/* Close button */}
               <button
                 onClick={closeModal}
-                className="panel-fade-item absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/30 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/50 transition-all"
+                className="absolute top-4 left-4 z-30 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/70 transition-all"
                 aria-label="Close modal"
               >
-                <span className="material-symbols-outlined text-lg">close</span>
+                <span className="material-symbols-outlined text-sm">close</span>
               </button>
             </div>
           </div>,
