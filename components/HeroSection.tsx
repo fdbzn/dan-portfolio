@@ -505,9 +505,9 @@ export default function HeroSection() {
           <h1 className="font-display-lg text-2xl sm:text-3xl md:text-5xl mb-3 md:mb-4 tracking-tighter leading-tight">
             <Typewriter
               parts={[
-                "¿Un minuto? ",
+                "¿Tienes un minuto? ",
                 1000,
-                "Esto es en lo que he estado trabajando.",
+                "En esto hemos estado trabajando.",
               ]}
             />
           </h1>
