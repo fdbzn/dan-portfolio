@@ -118,7 +118,6 @@ export async function getProjects(): Promise<Project[]> {
         richDescription: projectDesc as unknown as RichTextNode,
         tags: extractTags(entry),
         images: imageUrls,
-        images: imageUrls,
         borderColor: BORDER_COLORS[index % BORDER_COLORS.length],
         highlights: fallback.highlights,
       };
