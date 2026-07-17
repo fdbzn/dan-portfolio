@@ -7,6 +7,7 @@ const timelineData = [
   {
     role: "Sr. Technical Product Owner",
     company: "Viva Aerobus",
+    logo: "/logos/nuevo-logo-viva.svg",
     date: "Jul 2024 - Abr 2026",
     description: "Definición de estándares de API e integraciones core/satélite. Liderazgo técnico Front-End (arquitectura, UI/UX, rendimiento web). Gestión del backlog técnico, SDLC (CI/CD, Testing), proveedores externos y estrategias de QA (E2E).",
     stack: ["Python", "NodeJS", "AWS", "Azure", "GitLab CI/CD", "Akamai", "Datadog", "RDS", "DynamoDB", "MongoDB"],
@@ -14,6 +15,7 @@ const timelineData = [
   {
     role: "Consultor Especialista en E-commerce",
     company: "Profuturo",
+    logo: "/logos/download.webp",
     date: "Oct 2021 - Jun 2024",
     description: "Diseño de arquitectura cloud y liderazgo en e-commerce. Cumplimiento regulatorio WCAG 2.1 AA y optimización UX. Estrategia basada en KPI/datos. Automatización de flujos de trabajo con Adobe Marketo y testing E2E.",
     stack: ["Python", "NodeJS", "Vue.js", "React.js", "Next.js", "HTML/CSS", "MS SQL Server", "MongoDB", "OpenShift", "GitHub CI/CD", "Cloudflare", "Dynatrace"],
@@ -21,6 +23,7 @@ const timelineData = [
   {
     role: "Tech Lead / Full Stack Web Developer",
     company: "Agencia Catorce Días",
+    logo: "/logos/14d-logo.jpg",
     date: "Abr 2015 - Jun 2021",
     description: "Análisis de requerimientos (Design Sprint), estimaciones, diseño de bases de datos y desarrollo full-stack/mobile. Administración de servidores e infraestructura cloud.",
     stack: ["NodeJS", "PHP", "MySQL", "MongoDB", "Redis", "ReactJS", "React Native", "Dialogflow", "Docker", "AWS", "Azure", "Nginx", "Jenkins", "Git"],
@@ -28,6 +31,7 @@ const timelineData = [
   {
     role: "Sr. Full Stack Web Developer",
     company: "Quiminet.com",
+    logo: "/logos/logo_qn_og.png",
     date: "Ago 2014 - Feb 2015",
     description: "Desarrollo y mantenimiento de aplicaciones web con NodeJS, Express, PHP, Handlebars, JQuery, MySQL, MongoDB y Redis.",
     stack: ["NodeJS", "Express", "PHP", "Handlebars", "JQuery", "MySQL", "MongoDB", "Redis"],
@@ -117,7 +121,12 @@ export default function Timeline() {
                 <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-start mb-2">
                   <div className="min-w-0">
                     <h3 className={`font-headline-md text-lg md:text-xl ${index % 2 === 0 ? 'text-primary' : 'text-secondary'}`}>{item.role}</h3>
-                    <p className="font-label-code text-xs md:text-sm text-on-surface-variant mt-1">{item.company}</p>
+                    <p className="font-label-code text-xs md:text-sm text-on-surface-variant mt-1 flex items-center gap-2">
+                      {item.logo && (
+                        <img src={item.logo} alt={item.company} className="h-4 md:h-5 w-auto object-contain inline-block" />
+                      )}
+                      {item.company}
+                    </p>
                   </div>
                   <span className={`font-label-code text-xs md:text-label-code shrink-0 ${index % 2 === 0 ? 'text-secondary' : 'text-on-surface-variant'}`}>{item.date}</span>
                 </div>
